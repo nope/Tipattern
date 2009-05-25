@@ -10,21 +10,9 @@
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
-if ($event == 'templates') {
-	require_privs('templates');
+if ($event == 'template') {
+	require_privs('template');
 	
-	global templates;
-	templates = array(
-      "base_dir"      =>  "_templates",
-
-      "subdir_pages"  =>  "pages",
-      "subdir_forms"  =>  "forms",
-      "subdir_css"    =>  "style",
-
-      "ext_pages"     =>  ".page",
-      "ext_forms"     =>  ".form",
-      "ext_css"       =>  ".css"
-  );
 
 	$available_steps = array(
 		'list',
@@ -38,21 +26,14 @@ if ($event == 'templates') {
 	$step();
 }
 
-function	list()
+function	list($message = '')
 {
-	pagetop("Process Templates", "");
-  print "
-    <style type='text/css'>
-        .success { color: #009900; }
-        .failure { color: #FF0000; }
-    </style>
-
-    <table cellpadding='0' cellspacing='0' border='0' id='list' align='center'>
-        <tr>
-            <td>
-    ";
+	pagetop(gTxt('template'), $message);
 }
 
+
+
+/*
 
 
     $hcg_templates = array(
@@ -67,21 +48,11 @@ function	list()
         "ext_css"       =>  ".css"
     );
 
-/*
-    PLUGIN CODE (no editing below this line, please)
-    -------------------------------------------------------------------------
-*/
+
     define('_HCG_TEMPLATES_IMPORT', 1);
     define('_HCG_TEMPLATES_EXPORT', 2);
     $GLOBALS['_HCG_TEMPLATES'] = $hcg_templates;
 
-
-
-   
-    /*
-        PLUGIN CODE::MAIN CALLBACK
-        -------------------------------------------------------------
-    */
         function hcg_templates($event, $step) {
 			$GLOBALS['prefs'] = get_prefs();
             $template = new hcg_template();
@@ -153,10 +124,7 @@ function	list()
 
             $this->_config = $_HCG_TEMPLATES;
 
-        /*
-            PRIVATE CONFIG
-            ------------------------------------------------------
-        */
+
             $this->_config['root_path']         =   $prefs['path_to_site'];
             $this->_config['full_base_path']    =   sprintf(
                                                         "%s/%s",
@@ -228,17 +196,7 @@ function	list()
         }
 
         function checkdir($dir = '', $type = _HCG_TEMPLATES_EXPORT) {
-            /*
-                If $type == _EXPORT, then:
-                    1.  Check to see that /base/path/$dir exists, and is
-                        writable.  If not, create it.
-                    2.  Check to see that /base/path/$dir/subdir_* exist,
-                        and are writable.  If not, create them.
-
-                If $type == _IMPORT, then:
-                    1.  Check to see that /base/path/$dir exists, and is readable.
-                    2.  Check to see that /base/path/$dir/subdir_* exist, and are readable.
-            */
+          
             $dir =  sprintf(
                         "%s/%s",
                         $this->_config['full_base_path'],
@@ -281,10 +239,7 @@ function	list()
             return true;
         }
 
-        /*
-            EXPORT FUNCTIONS
-            ----------------------------------------------------------
-        */
+
         function export($dir = '') {
             if (!$this->checkdir($dir, _HCG_TEMPLATES_EXPORT)) {
                 return;
@@ -338,10 +293,7 @@ function	list()
             }
         }
 
-        /*
-            IMPORT FUNCTIONS
-            ----------------------------------------------------------
-        */
+
         function getTemplateList() {
             $dir = opendir($this->_config['full_base_path']);
 
@@ -368,9 +320,7 @@ function	list()
                 return;
             }
 
-            /*
-                Auto export into `preimport-data`
-            */
+
             print "
                 <h1>Backing up current template data</h1>
                 <p>Your current template data will be available for re-import as `preimport-data`.</p>
@@ -437,4 +387,5 @@ function	list()
             }
         }
     }
+*/
 ?>
