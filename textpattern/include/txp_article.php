@@ -882,9 +882,9 @@ if (!empty($event) and $event == 'article') {
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf(gtxt('date').sp.
-						tsi('exp_year', '%Y', $sExpires).' / '.
-						tsi('exp_month', '%m', $sExpires).' / '.
-						tsi('exp_day', '%d', $sExpires)
+						tsd('exp_year', '%Y', $sExpires, "expire", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '.
+						tsd('exp_month', '%m', $sExpires, "expire-mm").' / '.
+						tsd('exp_day', '%d', $sExpires, "expire-dd")
 					).
 
 					n.graf(gTxt('time').sp.
