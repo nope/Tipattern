@@ -286,4 +286,14 @@ $LastChangedRevision: 3188 $
 			$s
 		.'" size="'.$size.'" maxlength="'.$size.'" class="edit"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
 	}
+	
+//---------- clone tsi->tsd per aggiungere il calendarietto
+	function tsd($name,$datevar,$time,$tab='',$class,$id)
+	{
+		$size = ($name=='year' or $name=='exp_year') ? 4 : 2;
+		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
+		return n.'<input type="text" name="'.$name.'" value="'.
+			$s
+		.'" size="'.$size.'" maxlength="'.$size.'" id="'.$id.'" class="edit '.$class.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
+	}
 ?>
