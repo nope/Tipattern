@@ -847,9 +847,9 @@ if (!empty($event) and $event == 'article') {
 					n.graf(gTxt('published_at').sp.popHelp('timestamp')).
 
 					n.graf(gtxt('date').sp.
-						tsi('year', '%Y', $sPosted).' / '.
-						tsi('month', '%m', $sPosted).' / '.
-						tsi('day', '%d', $sPosted)
+						tsd('year', '%Y', $sPosted, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '.
+						tsd('month', '%m', $sPosted, "data-mm").' / '.
+						tsd('day', '%d', $sPosted, "data-dd")
 					).
 
 					n.graf(gTxt('time').sp.
