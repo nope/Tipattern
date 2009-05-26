@@ -680,7 +680,7 @@ if (!empty($event) and $event == 'article') {
 			echo pluggable_ui('article_ui', 'status',
 				n.n.'<fieldset id="write-status">'.
 				n.'<legend>'.gTxt('status').'</legend>'.
-				n.status_option($Status).               //modificato radio->option
+				n.status_option($Status).
 				n.'</fieldset>',
 				$rs);
 
@@ -992,21 +992,6 @@ if (!empty($event) and $event == 'article') {
 
 //--------------------------------------------------------------
 
-	function status_radio($Status)
-	{
-		global $statuses;
-
-		$Status = (!$Status) ? 4 : $Status;
-
-		foreach ($statuses as $a => $b)
-		{
-			$out[] = n.t.'<li>'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
-				'<label for="status-'.$a.'">'.$b.'</label></li>';
-		}
-
-		return '<ul class="plain-list">'.join('', $out).n.'</ul>';
-	}
-//--------------- conversione di radio button in select
 	function status_option($Status)
 	{
 		global $statuses;
@@ -1018,7 +1003,7 @@ if (!empty($event) and $event == 'article') {
 			$out[] = n.t.'<li>'.option('Status', $a, $b, ($Status == $a) ? 1 : 0, 'status-'.$a);
 		}
 
-		return '<select class="plain-list">'.join('', $out).n.'</select>';
+		return '<select class="list">'.join('', $out).n.'</select>';
 	}
 
 
