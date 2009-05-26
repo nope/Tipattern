@@ -553,6 +553,32 @@ if (!empty($event) and $event == 'article') {
 			echo '</p>';
 		}
 
+		//-- excerpt --------------------
+
+			if ($articles_use_excerpts)
+			{
+				if ($view == 'text')
+				{
+					echo pluggable_ui('article_ui', 'excerpt',
+						n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
+						'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>'),
+						$rs);
+				}
+
+				else
+				{
+					echo n.'<hr width="50%" />';
+
+					echo ($textile_excerpt == USE_TEXTILE)
+					?	($view=='preview')
+						?	graf($textile->textileThis($Excerpt))
+						:	tag(str_replace(array(n,t),
+								array(br,sp.sp.sp.sp),htmlspecialchars(
+									$textile->TextileThis($Excerpt))),'code')
+					:	graf($Excerpt);
+				}
+			}
+
 	//-- body --------------------
 
 		if ($view == 'preview')
@@ -600,33 +626,6 @@ if (!empty($event) and $event == 'article') {
 				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>'),
 				$rs);
 		}
-
-	//-- excerpt --------------------
-
-		if ($articles_use_excerpts)
-		{
-			if ($view == 'text')
-			{
-				echo pluggable_ui('article_ui', 'excerpt',
-					n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
-					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>'),
-					$rs);
-			}
-
-			else
-			{
-				echo n.'<hr width="50%" />';
-
-				echo ($textile_excerpt == USE_TEXTILE)
-				?	($view=='preview')
-					?	graf($textile->textileThis($Excerpt))
-					:	tag(str_replace(array(n,t),
-							array(br,sp.sp.sp.sp),htmlspecialchars(
-								$textile->TextileThis($Excerpt))),'code')
-				:	graf($Excerpt);
-			}
-		}
-
 
 	//-- author --------------
 
