@@ -221,6 +221,19 @@ $LastChangedRevision: 3188 $
 		return join('', $o);
 	}
 
+//------------
+
+	function option($name, $value, $label, $checked = '1', $id = '', $tabindex = '')
+	{
+		$o[] = '<option name="'.$name.'" value="'.$value.'"';
+		$o[] = ($id) ? ' id="'.$id.'"' : '';
+		$o[] = ($checked == '1') ? ' checked="checked"' : '';
+		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
+		$o[] = ' class="radio" >'.$label.'</option>';
+
+		return join('', $o);
+	}
+
 //-------------------------------------------------------------
 
 	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '')
