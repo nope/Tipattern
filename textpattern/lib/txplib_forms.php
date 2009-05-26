@@ -288,7 +288,7 @@ $LastChangedRevision: 3188 $
 	}
 	
 //---------- clone tsi->tsd per aggiungere il calendarietto
-	function tsd($name,$datevar,$time,$tab='',$class,$id)
+	function tsd($name,$datevar,$time,$id,$class,$tab='')
 	{
 		$size = ($name=='year' or $name=='exp_year') ? 4 : 2;
 		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
