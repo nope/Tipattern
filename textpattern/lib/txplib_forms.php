@@ -300,7 +300,7 @@ $LastChangedRevision: 3188 $
 		.'" size="'.$size.'" maxlength="'.$size.'" class="edit"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
 	}
 	
-//---------- clone tsi->tsd per aggiungere il calendarietto
+//---------- 
 	function tsd($name,$datevar,$time,$id,$class='',$tab='')
 	{
 		$size = ($name=='year' or $name=='exp_year') ? 4 : 2;
