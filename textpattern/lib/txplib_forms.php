@@ -223,13 +223,13 @@ $LastChangedRevision: 3188 $
 
 //------------
 
-	function option($name, $value, $label, $checked = '1', $id = '', $tabindex = '')
+	function option($name, $value, $label, $selected = '1', $id = '', $tabindex = '')
 	{
 		$o[] = '<option name="'.$name.'" value="'.$value.'"';
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
-		$o[] = ($checked == '1') ? ' checked="checked"' : '';
+		$o[] = ($selected == '1') ? ' selected="selected"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="radio" >'.$label.'</option>';
+		$o[] = ' >'.$label.'</option>';
 
 		return join('', $o);
 	}
