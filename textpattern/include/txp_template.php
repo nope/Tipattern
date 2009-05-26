@@ -10,23 +10,37 @@
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
+define('TEMPLATES_IMPORT', 1);
+define('TEMPLATES_EXPORT', 2);
+$GLOBALS['TEMPLATES'] = array(
+    "base_dir"      =>  "_templates",
+
+    "subdir_pages"  =>  "pages",
+    "subdir_forms"  =>  "forms",
+    "subdir_css"    =>  "style",
+
+    "ext_pages"     =>  ".page",
+    "ext_forms"     =>  ".form",
+    "ext_css"       =>  ".css"
+);
+
 if ($event == 'template') {
 	require_privs('template');
 	
 
 	$available_steps = array(
-		'list',
+		'lista'/*,
 		'import',
-		'export'
+		'export'*/
 	);
 
 	if(!$step or !in_array($step, $available_steps)){
-		$step = 'list';
+		$step = 'lista';
 	}
 	$step();
 }
 
-function	list($message = '')
+function	lista($message = '')
 {
 	pagetop(gTxt('template'), $message);
 }
