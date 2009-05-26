@@ -675,7 +675,7 @@ if (!empty($event) and $event == 'article') {
 				'</p>';
 			}
 
-		//-- status radios --------------
+		//-- status radios -------------- qui va cambiato da radio a list
 
 			echo pluggable_ui('article_ui', 'status',
 				n.n.'<fieldset id="write-status">'.
