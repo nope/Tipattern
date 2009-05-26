@@ -1,167 +1,0 @@
-8
-
-dir
-3203
-http://textpattern.googlecode.com/svn/development/4.0/textpattern
-http://textpattern.googlecode.com/svn
-
-
-
-2009-05-20T11:39:29.801996Z
-3203
-r.wetzlmayr
-has-props
-
-svn:special svn:externals svn:needs-lock
-
-
-
-
-
-
-
-
-
-
-
-2fea6a4d-a838-0410-917b-93a53c48e9d2
-
-lang
-dir
-
-update
-dir
-
-include
-dir
-
-jquery.js
-file
-
-
-
-
-2009-03-31T16:40:07.000000Z
-bb381e2d19d8eace86b34d20759491a5
-2009-03-07T09:11:07.989159Z
-3128
-r.wetzlmayr
-
-publish.php
-file
-
-
-
-
-2009-05-25T14:08:05.000000Z
-2d44a840e4481dd47470704c6f924443
-2009-04-30T11:04:36.717639Z
-3187
-r.wetzlmayr
-has-props
-
-config-dist.php
-file
-
-
-
-
-2009-05-25T14:08:02.000000Z
-35f3a8045debe905a9cfeef1b2b67131
-2008-10-02T16:28:49.008042Z
-2980
-r.wetzlmayr
-
-index.php
-file
-
-
-
-
-2009-05-25T14:08:05.000000Z
-97b5b2f18e77aab70877b48e6c333fda
-2009-05-11T12:37:52.854734Z
-3189
-r.wetzlmayr
-has-props
-
-textpattern.js
-file
-
-
-
-
-2009-03-31T16:40:07.000000Z
-fe344d5083703ac7fa82dc52e1649236
-2009-03-07T07:13:34.704688Z
-3125
-r.wetzlmayr
-
-tmp
-dir
-
-setup
-dir
-
-license.txt
-file
-
-
-
-
-2009-03-31T16:40:07.000000Z
-00a58df11c81a717b7441ba853dbf85f
-2005-07-26T23:56:07.930611Z
-628
-zem
-has-props
-
-theme
-dir
-
-checksums.txt
-file
-
-
-
-
-2009-03-31T16:40:07.000000Z
-c26cc700f13112903031ec281e496b43
-2009-01-23T21:02:14.725911Z
-3087
-r.wetzlmayr
-
-lib
-dir
-
-publish
-dir
-
-txp_img
-dir
-
-textpattern.css
-file
-
-
-
-
-2009-03-31T16:40:07.000000Z
-92dae2eecfc0448b7f5a06d779028972
-2009-03-25T07:19:29.074514Z
-3165
-r.wetzlmayr@gmail.com
-
-css.php
-file
-
-
-
-
-2009-05-25T14:08:05.000000Z
-75c59860102987451c5086a356333f36
-2009-05-11T12:37:52.854734Z
-3189
-r.wetzlmayr
-has-props
-
