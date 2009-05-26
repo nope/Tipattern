@@ -778,10 +778,10 @@ if (!empty($event) and $event == 'article') {
 
 					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp')).
 
-					n.graf(gtxt('date').sp.
-						tsd('year', '%Y', $persist_timestamp, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '.
+					n.graf(gtxt('date').sp.	
 						tsd('month', '%m', $persist_timestamp, "data-mm").' / '.
-						tsd('day', '%d', $persist_timestamp, "data-dd")
+						tsd('day', '%d', $persist_timestamp, "data-dd").
+						tsd('year', '%Y', $persist_timestamp, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '
 					).
 
 					n.graf(gTxt('time').sp.
@@ -804,9 +804,9 @@ if (!empty($event) and $event == 'article') {
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf(gtxt('date').sp.
-						tsd('exp_year', '%Y', $persist_timestamp, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '.
 						tsd('exp_month', '%m', $persist_timestamp, "data-mm").' / '.
-						tsd('exp_day', '%d', $persist_timestamp, "data-dd")
+						tsd('exp_day', '%d', $persist_timestamp, "data-dd").
+						tsd('exp_year', '%Y', $persist_timestamp, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '
 					).
 
 					n.graf(gTxt('time').sp.
@@ -847,9 +847,9 @@ if (!empty($event) and $event == 'article') {
 					n.graf(gTxt('published_at').sp.popHelp('timestamp')).
 
 					n.graf(gtxt('date').sp.
-						tsd('year', '%Y', $sPosted, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '.
 						tsd('month', '%m', $sPosted, "data-mm").' / '.
-						tsd('day', '%d', $sPosted, "data-dd")
+						tsd('day', '%d', $sPosted, "data-dd").
+						tsd('year', '%Y', $sPosted, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '
 					).
 
 					n.graf(gTxt('time').sp.
@@ -882,9 +882,9 @@ if (!empty($event) and $event == 'article') {
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf(gtxt('date').sp.
-						tsd('exp_year', '%Y', $sExpires, "expire", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '.
 						tsd('exp_month', '%m', $sExpires, "expire-mm").' / '.
-						tsd('exp_day', '%d', $sExpires, "expire-dd")
+						tsd('exp_day', '%d', $sExpires, "expire-dd").
+						tsd('exp_year', '%Y', $sExpires, "expire", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '
 					).
 
 					n.graf(gTxt('time').sp.
