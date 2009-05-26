@@ -675,12 +675,12 @@ if (!empty($event) and $event == 'article') {
 				'</p>';
 			}
 
-		//-- status radios -------------- qui va cambiato da radio a list
+		//-- status radios --------------
 
 			echo pluggable_ui('article_ui', 'status',
 				n.n.'<fieldset id="write-status">'.
 				n.'<legend>'.gTxt('status').'</legend>'.
-				n.status_radio($Status).
+				n.status_option($Status).               //modificato radio->option
 				n.'</fieldset>',
 				$rs);
 
@@ -779,9 +779,9 @@ if (!empty($event) and $event == 'article') {
 					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp')).
 
 					n.graf(gtxt('date').sp.
-						tsi('year', '%Y', $persist_timestamp).' / '.
-						tsi('month', '%m', $persist_timestamp).' / '.
-						tsi('day', '%d', $persist_timestamp)
+						tsd('year', '%Y', $persist_timestamp, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '.
+						tsd('month', '%m', $persist_timestamp, "data-mm").' / '.
+						tsd('day', '%d', $persist_timestamp, "data-dd")
 					).
 
 					n.graf(gTxt('time').sp.
@@ -804,9 +804,9 @@ if (!empty($event) and $event == 'article') {
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf(gtxt('date').sp.
-						tsi('exp_year', '%Y', $persist_timestamp).' / '.
-						tsi('exp_month', '%m', $persist_timestamp).' / '.
-						tsi('exp_day', '%d', $persist_timestamp)
+						tsd('exp_year', '%Y', $persist_timestamp, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks").' / '.
+						tsd('exp_month', '%m', $persist_timestamp, "data-mm").' / '.
+						tsd('exp_day', '%d', $persist_timestamp, "data-dd")
 					).
 
 					n.graf(gTxt('time').sp.
@@ -1006,6 +1006,22 @@ if (!empty($event) and $event == 'article') {
 
 		return '<ul class="plain-list">'.join('', $out).n.'</ul>';
 	}
+//--------------- conversione di radio button in select
+	function status_option($Status)
+	{
+		global $statuses;
+
+		$Status = (!$Status) ? 4 : $Status;
+
+		foreach ($statuses as $a => $b)
+		{
+			$out[] = n.t.'<li>'.option('Status', $a, $b, ($Status == $a) ? 1 : 0, 'status-'.$a);
+		}
+
+		return '<select class="plain-list">'.join('', $out).n.'</select>';
+	}
+
+
 
 //--------------------------------------------------------------
 
