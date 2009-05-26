@@ -54,6 +54,7 @@ $LastChangedRevision: 3182 $
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
 	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="datepicker.js"></script>
 	<?php echo script_js(
 		"var textpattern = {event: '$event', step: '$step'};"
 	); ?>
