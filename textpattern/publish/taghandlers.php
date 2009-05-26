@@ -1514,7 +1514,7 @@ $LastChangedRevision: 3174 $
 			}
 		}
 
-		return ($wraptag) ? doTag($out, $wraptag, '', $class) : $out;
+		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
 
 // -------------------------------------------------------------
