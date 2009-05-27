@@ -993,20 +993,18 @@ if (!empty($event) and $event == 'article') {
 //--------------------------------------------------------------
 
 	function status_option($Status)
-	{
-		global $statuses;
-
-		$Status = (!$Status) ? 4 : $Status;
-
-		foreach ($statuses as $a => $b)
 		{
-			$out[] = n.t.'<li>'.option('Status', $a, $b, ($Status == $a) ? 1 : 0, 'status-'.$a);
+			global $statuses;
+
+			$Status = (!$Status) ? 4 : $Status;
+
+			foreach ($statuses as $a => $b)
+			{
+				$out[] = n.t.'<li>'.option('', $a, $b, ($Status == $a) ? 1 : 0, 'status-'.$a);
+			}
+
+			return '<select class="list" name="Status">'.join('', $out).n.'</select>';
 		}
-
-		return '<select class="list">'.join('', $out).n.'</select>';
-	}
-
-
 
 //--------------------------------------------------------------
 
