@@ -1,50 +1,69 @@
 <?php
 
-    $JPCACHE_VERSION="v2";
-
 /*
-  jpcache
-  Copyright 2001 - 2003 Jean-Pierre Deckers <jp@jpcache.com>
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+if (function_exists("register_callback")) {
+	register_callback("txp_flush_event", "article", "edit");
+	register_callback("txp_flush_event", "article", "create");
+	register_callback("txp_flush_event", "link");
+	register_callback("txp_flush_event", "page", "page_save");
+	register_callback("txp_flush_event", "form", "form_save");
+	register_callback("txp_flush_event", "list", "list_multi_edit");
+	register_callback("txp_flush_event", "discuss");
+	// We do not have a callback when comments are posted on the front_end
+	// but that's ok, I hacked some magic into cache-main.php
+}
 */
 
-/*
- Credits:
+// This function clears the Cache directory. Make sure cache is installed in the right directory.
+function txp_flushdir($force_clean = false) {
+	global $path_to_site, $lastmod;
 
-    Based upon and inspired by:
-        phpCache        <nathan@0x00.org> (http://www.0x00.org/phpCache)
-        gzdoc.php       <catoc@163.net> and <jlim@natsoft.com.my> 
-        jr-cache.php    <jr-jrcache@quo.to>
+	$count = 0;
+	$txp_cache_dir = txpath.'/cache';
 
-    More info on http://www.jpcache.com/
+	if (!empty($txp_cache_dir) and $fp = opendir($txp_cache_dir)) {
+		$last = strtotime($lastmod);
+		while (false !== ($file = readdir($fp))) {
+			if ($file{0} != "." AND
+				 ((filemtime("$txp_cache_dir/$file") < $last) OR $force_clean)){
+				@unlink("$txp_cache_dir/$file");
+				++$count;
+			}
+		}
 
- */
- 
-    // Set the includedir to the jpcache-directory
-    $includedir = dirname(__FILE__);
+		closedir($fp);
+	}
 
-    // Configuration file
-    require "$includedir/cache-config.php";
-    
-    // Standard functions
-    require "$includedir/cache-main.php";
-       
-    // Type specific implementations
-    require "$includedir/$JPCACHE_TYPE.php";
+	return $count;
+}
 
-    // Start caching
-    jpcache_start();
+function txp_flushcachedir($force_clean = false) {
+	global $path_to_site, $lastmod;
+
+	$txp_cache_dir = txpath.'/cache';
+
+	if (!empty($txp_cache_dir) and $fp = opendir($txp_cache_dir)) {
+		$last = strtotime($lastmod);
+		while (false !== ($file = readdir($fp))) {
+			if ($file{0} != "." AND
+				 ((filemtime("$txp_cache_dir/$file") < $last) OR $force_clean)){
+				@unlink("$txp_cache_dir/$file");
+			}
+		}
+
+		closedir($fp);
+	}
+	return;
+}
+
+// This is the callback-function when something in the Admin-Panel gets changed. (Wrapper)
+function txp_flush_event($event, $step) {
+	if ( ($event==='article')
+		 && (($step==='create') || ($step==='edit'))
+		 && ((count($_POST)==0) || ($_REQUEST['view']!='')) ) return;
+	elseif (count($_POST)==0) return;
+	$count = txp_flushdir(true);
+}
+
+
 ?>

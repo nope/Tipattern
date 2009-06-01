@@ -299,6 +299,7 @@ if (!empty($event) and $event == 'article') {
 				do_pings();
 			}
 			update_lastmod();
+			
 		}
 
 		$s = check_url_title($url_title);

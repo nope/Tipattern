@@ -4,6 +4,7 @@
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/txplib_misc.php $
 $LastChangedRevision: 3188 $
 */
+include txpath.'/lib/txp_cache/txplib_cache.php';
 
 // -------------------------------------------------------------
 	function doArray($in,$function)
@@ -1696,6 +1697,7 @@ $LastChangedRevision: 3188 $
 //-------------------------------------------------------------
 	function update_lastmod() {
 		safe_upsert("txp_prefs", "val = now()", "name = 'lastmod'");
+		txp_flushcachedir(true);
 	}
 
 //-------------------------------------------------------------

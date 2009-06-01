@@ -13,6 +13,8 @@ $GLOBALS['TEMPLATES'] = array(
     "ext_css"       =>  ".css"
 );
 
+include txpath.'/lib/txp_cache/txplib_cache.php';
+
 class template {
     function template() {
 	global $prefs;
@@ -292,6 +294,7 @@ class template {
 		            $success = true;
                     if ($success) {
                         print "<li><span class='success'>Successfully imported</span> file '".$filename."'</li>";
+												txp_flushcachedir(true);
                     } else {
                         print "<li><span class='failure'>Failed importing</span> file '".$filename."'</li>";
                     }

@@ -34,7 +34,7 @@
  */
  
     // Set the includedir to the jpcache-directory
-    $includedir = dirname(__FILE__);
+    $includedir = txpath.'/lib/txp_cache';
 
     // Configuration file
     require "$includedir/cache-config.php";
