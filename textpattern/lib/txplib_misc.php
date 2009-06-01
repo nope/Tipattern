@@ -2334,4 +2334,37 @@ eod;
 		}
 		return;
 	}
+	
+	// --------------------------------------------------------------
+		function fetch_section_description($name)
+		{
+			static $sections = array();
+
+			if (isset($sections[$name]))
+				$f = $sectionss[$name];
+			else {
+				$row = safe_row('descr', 'txp_section',"name='".doSlash($name)."'");
+				if (!$row) {
+					return;
+				}
+				$f = $row['descr'];
+				$sectionss[$name] = $f;
+			}
+
+			trace_add('['.gTxt('section').': '.$name.']');
+			return $f;
+		}
+
+	// --------------------------------------------------------------
+		function parse_section_description($name)
+		{
+			static $stack = array();
+
+			$f = fetch_section_description($name);
+			if ($f) {
+				$out = parse($f);
+				return $out;
+			}
+		}
+	
 ?>

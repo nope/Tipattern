@@ -868,6 +868,9 @@ style => Stile
 syndicate => Condividi
 uses_page => Usa la pagina
 uses_style => Usa lo stile
+section_descr => Descrizione della sezione
+section_metakey => Meta-Keyword della sezione
+section_metadesc => Meta-Description della sezione
 #@setup
 about_to_create => Stai per creare e popolare le tabelle del database.
 already_installed => Sembra che Textpattern è già installato. Se vuoi procedere a un'installazione da zero rimuovi <code>config.php</code> dalla tua cartella <code>/textpattern/</code> e prova di nuovo.

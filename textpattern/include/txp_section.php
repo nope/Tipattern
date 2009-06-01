@@ -92,7 +92,7 @@ $LastChangedRevision: 3203 $
 				td()
 			);
 
-		$rs = safe_rows_start('*', 'txp_section', "name != 'default' order by name");
+		$rs = safe_rows_start('*', 'txp_section', "name != 'default' AND name != 'home' order by name");
 
 		if ($rs)
 		{

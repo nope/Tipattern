@@ -3747,4 +3747,39 @@ $LastChangedRevision: 3174 $
 		           ? "<!-- $empty -- Threshhold: $thresh Length: $parsed_len -->" . $parsed
 		           : $parsed;
 		}
+		
+		function	section_description($atts, $thing = NULL ) 
+		{
+			global $thisarticle, $s, $thissection;
+			
+			extract(lAtts(array(
+				'class'   => 'section_description',
+				'name'		=> '',
+				'wraptag' => 'p',
+			), $atts));
+			
+			if ($name)
+			{
+				$sec = $name;
+			}
+
+			elseif (!empty($thissection['name']))
+			{
+				$sec = $thissection['name'];
+			}
+
+			elseif (!empty($thisarticle['section']))
+			{
+				$sec = $thisarticle['section'];
+			}
+
+			else
+			{
+				$sec = $s;
+			}
+			
+			return doTag(parse_section_description($sec), $wraptag, $class);
+			
+		}
+		
 ?>

@@ -357,7 +357,7 @@ $LastChangedRevision: 3187 $
 						}
 				}
 			} else {
-				$out['s'] = 'default';
+				$out['s'] = 'home'; //cambiata default -> home correggere per le ricerche!!!!
 			}
 		}
 		else {
