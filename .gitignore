@@ -1,0 +1,5 @@
+_templates/*
+files/*
+jpcache/cache/*
+textpattern/config.php
+*/*.DS_Store
