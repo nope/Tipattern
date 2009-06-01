@@ -4,7 +4,6 @@
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/txplib_misc.php $
 $LastChangedRevision: 3188 $
 */
-include txpath.'/lib/txp_cache/txplib_cache.php';
 
 // -------------------------------------------------------------
 	function doArray($in,$function)
@@ -1697,7 +1696,7 @@ include txpath.'/lib/txp_cache/txplib_cache.php';
 //-------------------------------------------------------------
 	function update_lastmod() {
 		safe_upsert("txp_prefs", "val = now()", "name = 'lastmod'");
-		txp_flushcachedir(true);
+		flushcachedir(true);
 	}
 
 //-------------------------------------------------------------
@@ -2315,5 +2314,24 @@ eod;
 		$out[] = '</textpattern>';
 		echo(join(n, $out));
 		exit();
+	}
+	
+	function flushcachedir($force_clean = false) {
+		global $lastmod;
+
+		$txp_cache_dir = txpath.'/cache';
+
+		if (!empty($txp_cache_dir) and $fp = opendir($txp_cache_dir)) {
+			$last = strtotime($lastmod);
+			while (false !== ($file = readdir($fp))) {
+				if ($file{0} != "." AND
+					 ((filemtime("$txp_cache_dir/$file") < $last) OR $force_clean)){
+					@unlink("$txp_cache_dir/$file");
+				}
+			}
+
+			closedir($fp);
+		}
+		return;
 	}
 ?>
