@@ -158,6 +158,21 @@ $LastChangedRevision: 3203 $
 									yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
 								, '', 'noline')
 							).
+							
+							n.n.tr(
+								fLabelCell(gTxt('section_descr').':').
+								fTextCell('descr', $descr, 1, 4, 20)
+							).
+							
+							n.n.tr(
+								fLabelCell(gTxt('section_metakey').':').
+								fInputCell('metakey', $metakey, 1, 20)
+							).
+							
+							n.n.tr(
+								fLabelCell(gTxt('section_metadesc').':').
+								fTextCell('metadesc', $metadesc, 1, 4, 20)
+							).
 
 							pluggable_ui('section_ui', 'extend_detail_form', '', $a).
 
@@ -208,6 +223,9 @@ $LastChangedRevision: 3203 $
 				   "txp_section",
 				   "name         = '".doSlash($name) ."',
 					title        = '".doSlash($title)."',
+					descr				 = '',
+					metakey			 = '',
+					metadesc		 = '',
 					page         = 'default',
 					css          = 'default',
 					is_default   = 0,
@@ -246,7 +264,7 @@ $LastChangedRevision: 3203 $
 		global $txpcfg;
 
 		extract(doSlash(psa(array('page','css','old_name'))));
-		extract(psa(array('name', 'title')));
+		extract(psa(array('name', 'title', 'descr', 'metakey', 'metadesc')));
 
 		if (empty($title))
 		{
@@ -295,7 +313,10 @@ $LastChangedRevision: 3203 $
 				is_default   = $is_default,
 				on_frontpage = $on_frontpage,
 				in_rss       = $in_rss,
-				searchable   = $searchable
+				searchable   = $searchable,
+				descr				 = '$descr',
+				metakey      = '$metakey',
+				metadesc     = '$metadesc' 
 			", "name = '$old_name'");
 
 			safe_update('textpattern', "Section = '$name'", "Section = '$old_name'");
