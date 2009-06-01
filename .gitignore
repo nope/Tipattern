@@ -5,4 +5,4 @@ textpattern/config.php
 texpattern/tmp/*
 */.DS_Store
 .DS_Store
-
+clean.sh
