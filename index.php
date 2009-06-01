@@ -41,7 +41,7 @@ $LastChangedRevision: 3189 $
 		exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
 	}
 
-	include txpath.'/lib/txp_cache/txplib_cache.php'; // aggiunta la cache
+	include txpath.'/lib/txp_cache/cache.php'; // aggiunta la cache
 	include txpath.'/publish.php';
 	textpattern();
 
