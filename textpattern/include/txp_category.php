@@ -358,6 +358,8 @@ if ($event == 'category') {
 		$title = ps('title');
 
 		$name = strtolower(sanitizeForUrl($title));
+		
+		$descr = $metakey = $metadesc = '';
 
 		if (!$name)
 		{
@@ -375,7 +377,7 @@ if ($event == 'category') {
 			return cat_category_list($message);
 		}
 
-		$q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = 'root'");
+		$q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = 'root', descr = '".doSlash($descr)."', metakey = '".doSlash($metakey)."', metadesc = '".doSlash($metadesc)."'");
 
 		if ($q)
 		{
@@ -394,6 +396,7 @@ if ($event == 'category') {
 
 		$id     = assert_int(gps('id'));
 		$parent = doSlash(gps('parent'));
+		
 
 		$row = safe_row("*", "txp_category", "id=$id");
 		if($row){
@@ -403,6 +406,9 @@ if ($event == 'category') {
 				fLabelCell('parent') . td(cat_parent_pop($parent,$evname,$id)),
 				fLabelCell($evname.'_category_title') . fInputCell('title', $title, 1, 30),
 				pluggable_ui('category_ui', 'extend_detail_form', '', $row),
+				fLabelCell($evname.'_category_desc'). fTextCell('descr', $descr , 1, 4, 30),
+				fLabelCell($evname.'_category_meta_key'). fInputCell('metakey', $metakey, 1, 20),
+				fLabelCell($evname.'_category_meta_desc'). fTextCell('metadesc', $metadesc, 1, 4, 30),
 				hInput('id',$id),
 				tdcs(fInput('submit', '', gTxt('save_button'),'smallerbox'), 2)
 			);
@@ -417,7 +423,7 @@ if ($event == 'category') {
 	{
 		global $txpcfg;
 
-		extract(doSlash(psa(array('id', 'name', 'old_name', 'parent', 'title'))));
+		extract(doSlash(psa(array('id', 'name', 'old_name', 'parent', 'title', 'descr', 'metakey', 'metadesc'))));
 		$id = assert_int($id);
 
 		$name = sanitizeForUrl($name);
@@ -442,7 +448,7 @@ if ($event == 'category') {
 
 		$parent = ($parent) ? $parent : 'root';
 
-		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id"))
+		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', descr = '$descr', metakey = '$metakey', metadesc = '$metadesc'", "id = $id"))
 		{
 			safe_update('txp_category', "parent = '$name'", "parent = '$old_name'");
 		}
@@ -463,6 +469,7 @@ if ($event == 'category') {
 		$message = gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
 
 		cat_category_list($message);
+
 	}
 
 // --------------------------------------------------------------

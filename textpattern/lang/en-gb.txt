@@ -212,6 +212,7 @@ tab_forms => Forms
 tab_image => Images
 tab_import => Import
 tab_template => Templates
+tab_cache => Cache
 tab_link => Links
 tab_list => Articles
 tab_logs => Visitor Logs

@@ -254,10 +254,10 @@ $LastChangedRevision: 3188 $
 
 //-------------------------------------------------------------
 
-	function text_area($name, $h, $w, $thing = '', $id = '')
+	function text_area($name, $h, $w, $thing = '', $id = '', $cols = '40', $rows = '5', $tabindex = '' )
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
-		return '<textarea'.$id.' name="'.$name.'" cols="40" rows="5" style="width:'.$w.'px; height:'.$h.'px;">'.htmlspecialchars($thing).'</textarea>';
+		return '<textarea'.$id.' name="'.$name.'" tabindex="'.$tabindex.'" cols="'.$cols.'" rows="'.$rows.'" style="width:'.$w.'px; height:'.$h.'px;">'.htmlspecialchars($thing).'</textarea>';
 	}
 
 //-------------------------------------------------------------

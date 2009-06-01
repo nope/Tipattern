@@ -357,6 +357,17 @@ $LastChangedRevision: 3177 $
 			fInput('text', $name, $var, 'edit', '', '', $size, $tabindex, $id).$pop
 		,' class="noline"');
 	}
+	
+// -------------------------------------------------------------
+
+	function fTextCell($name, $var = '', $tabindex = '', $rows = '', $cols = '', $help = '', $id = '')
+	{
+		$pop = ($help) ? sp.popHelp($name) : '';
+
+		return tda(
+			text_area($name, '', '', $var, $id, $cols, $rows, $tabindex ).$pop
+		,' class="noline"');
+	}
 
 // -------------------------------------------------------------
 	function tag($content,$tag,$atts='')
