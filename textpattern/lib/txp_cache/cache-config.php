@@ -37,7 +37,7 @@
     /**
      * File based caching setting.
      */
-    $JPCACHE_DIR          = dirname(dirname(__FILE__))."/jpcache/cache"; 
+    $JPCACHE_DIR          = dirname(dirname(__FILE__))."/cache/cache"; 
     				   // Directory where jpcache must store 
                                    // generated files. Please use a dedicated
                                    // directory, and make it writable

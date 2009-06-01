@@ -350,7 +350,8 @@ $LastChangedRevision: 3182 $
 			gTxt('tab_logs')        => 'log',
 			gTxt('tab_plugins')     => 'plugin',
 			gTxt('tab_import')      => 'import',
-			gTxt('tab_template')    => 'template'
+			gTxt('tab_template')    => 'template',
+			gTxt('tab_cache')    => 'cache'
 		);
 
 		$areas['extensions'] = array(

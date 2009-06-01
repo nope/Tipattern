@@ -1,15 +1,15 @@
 <?php
 // I stole plenty of code from zem. Don't tell him! ;)
 	if (function_exists("register_callback")) {
-		register_callback("asy_flush_event", "article", "edit");
-		register_callback("asy_flush_event", "article", "create");
-		register_callback("asy_flush_event", "link");
-		register_callback("asy_flush_event", "page", "page_save");
-		register_callback("asy_flush_event", "form", "form_save");
-		register_callback("asy_flush_event", "list", "list_multi_edit");
-		register_callback("asy_flush_event", "discuss");
+		register_callback("txp_flush_event", "article", "edit");
+		register_callback("txp_flush_event", "article", "create");
+		register_callback("txp_flush_event", "link");
+		register_callback("txp_flush_event", "page", "page_save");
+		register_callback("txp_flush_event", "form", "form_save");
+		register_callback("txp_flush_event", "list", "list_multi_edit");
+		register_callback("txp_flush_event", "discuss");
 		// We do not have a callback when comments are posted on the front_end
-		// but that's ok, I hacked some magic into jpcache-main.php
+		// but that's ok, I hacked some magic into cache-main.php
 	}
 if (!defined('txpinterface'))
 	{
@@ -19,32 +19,32 @@ if (!defined('txpinterface'))
 	// Add a new tab to the Content area.
 	if ($event == 'cache') {
 		require_privs('cache');
-		register_tab("extensions", "asy_jpcache", "jpcache-cleaner");
-		register_callback("asy_jpcachecleaner", "asy_jpcache");
+		register_tab("admin", "txp_cache", "cache-cleaner");
+		register_callback("txp_cachecleaner", "txp_cache");
 	}
 
 	// This is the callback-function when something in the Admin-Panel gets changed. (Wrapper)
-	function asy_flush_event($event, $step) {
+	function txp_flush_event($event, $step) {
 		if ( ($event==='article')
 			 && (($step==='create') || ($step==='edit'))
 			 && ((count($_POST)==0) || ($_REQUEST['view']!='')) ) return;
 		elseif (count($_POST)==0) return;
-		$count = asy_flushdir(true);
+		$count = txp_flushdir(true);
 	}
 
 	// This is the Callback-Function for the Admin-CP
-	function asy_jpcachecleaner($event, $step) {
+	function txp_cachecleaner($event, $step) {
 		global $lastmod,$prefs,$path_to_site;
 		// ps() returns the contents of POST vars, if any;
 		if (ps("step") === "clean")
 		{
-			pagetop("JPCache Cleaner", ( (ps("asy_token") === (md5($lastmod)))
+			pagetop("JPCache Cleaner", ( (ps("txp_token") === (md5($lastmod)))
 					? "Successful"
 					: "Token expired. Please try again."));
-			if (ps("asy_token") === (md5($lastmod)))
+			if (ps("txp_token") === (md5($lastmod)))
 			{
 				echo "<div align=\"center\" style=\"margin-top:3em\">";
-				printf("Deleted %s files. Cache is clean.",''.asy_flushdir(true));
+				printf("Deleted %s files. Cache is clean.",''.txp_flushdir(true));
 				echo "</div>";
 			}
 		} else {
@@ -56,25 +56,25 @@ if (!defined('txpinterface'))
 			graf("Usually you don't need to do that. Cache is <b>automatically</b> cleared <br />1)
 				  after a certain amount of time <br />2) when a comment is posted, edited or moderated
 			      <br />3) after a page-template or form-tag is is modified.<br /><br />".
-				fInput("hidden", "asy_token", md5($lastmod)).
+				fInput("hidden", "txp_token", md5($lastmod)).
 				fInput("submit", "clean_cache", "Clean all cached Files", "smallerbox").
-				eInput("asy_jpcache").sInput("clean")
+				eInput("txp_cache").sInput("clean")
 			," style=\"text-align:center\"")
 		);
 		echo tag("Cache Statistics","h3");
 		global $path_to_site;$count = array('size'=>0, 'num'=>0);
-		$asy_cache_dir = $path_to_site .'/jpcache/cache';
-		if (!empty($asy_cache_dir) and $fp = opendir($asy_cache_dir)) {
+		$txp_cache_dir = $path_to_site .'/cache/cache';
+		if (!empty($txp_cache_dir) and $fp = opendir($txp_cache_dir)) {
 			while (false !== ($file = readdir($fp))) {
 				if ($file{0} != ".") {
-					$count['size'] += filesize("$asy_cache_dir/$file");
+					$count['size'] += filesize("$txp_cache_dir/$file");
 					++$count['num'];
 				}
 			}
 			closedir($fp);
 			printf("There are %d cache files with a total size of %d kb.", $count['num'], floor($count['size']/1000));
 		} else { echo "Cache is empty.";}
-		include $path_to_site .'/jpcache/jpcache-config.php';
+		include $path_to_site .'/lib/txp_cache/cache-config.php';
 /*		if (@$JPCACHE_TXPLOG_DO == 1 && $prefs['logging']=='all'){
 			echo tag("Read-Write-Ratio<sup>1</sup>","h3");;
 			$cachehits = safe_field('COUNT( id ) as hit', 'txp_log', "page LIKE '%#cachehit'");
@@ -86,19 +86,19 @@ if (!defined('txpinterface'))
 */		echo "</div>";
 	}
 
-	// This function clears the Cache directory. Make sure jpcache is installed in the right directory.
-	function asy_flushdir($force_clean = false) {
+	// This function clears the Cache directory. Make sure cache is installed in the right directory.
+	function txp_flushdir($force_clean = false) {
 		global $path_to_site, $lastmod;
 
 		$count = 0;
-		$asy_cache_dir = $path_to_site .'/jpcache/cache';
+		$txp_cache_dir = $path_to_site .'/cache/cache';
 
-		if (!empty($asy_cache_dir) and $fp = opendir($asy_cache_dir)) {
+		if (!empty($txp_cache_dir) and $fp = opendir($txp_cache_dir)) {
 			$last = strtotime($lastmod);
 			while (false !== ($file = readdir($fp))) {
 				if ($file{0} != "." AND
-					 ((filemtime("$asy_cache_dir/$file") < $last) OR $force_clean)){
-					@unlink("$asy_cache_dir/$file");
+					 ((filemtime("$txp_cache_dir/$file") < $last) OR $force_clean)){
+					@unlink("$txp_cache_dir/$file");
 					++$count;
 				}
 			}

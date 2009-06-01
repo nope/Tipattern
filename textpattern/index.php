@@ -132,7 +132,7 @@ $LastChangedRevision: 3189 $
 		if (is_readable($inc))
 			include($inc);
 		
-		include txpath.'/include/txp_cache.php';	
+		/* include txpath.'/include/txp_cache.php';	*/
 
 		callback_event($event, $step, 0);
 
