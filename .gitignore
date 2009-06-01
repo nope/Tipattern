@@ -2,4 +2,7 @@ _templates/*
 files/*
 jpcache/cache/*
 textpattern/config.php
+texpattern/tmp/*
 */*.DS_Store
+.DS_Store
+
