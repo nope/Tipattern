@@ -1,4 +1,17 @@
 <?php
+define('TEMPLATES_IMPORT', 1);
+define('TEMPLATES_EXPORT', 2);
+$GLOBALS['TEMPLATES'] = array(
+    "base_dir"      =>  "_templates",
+
+    "subdir_pages"  =>  "pages",
+    "subdir_forms"  =>  "forms",
+    "subdir_css"    =>  "style",
+
+    "ext_pages"     =>  ".page",
+    "ext_forms"     =>  ".form",
+    "ext_css"       =>  ".css"
+);
 
 class template {
     function template() {
