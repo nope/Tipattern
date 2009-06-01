@@ -198,6 +198,7 @@ $txp_permissions = array(
 	'list'                        => '1,2,3,4,5,6', //likely the same as for article.
 	'category'                    => '1,2,3',
 	'css'                         => '1,2,      6',
+	'cache'												=> '1,2',
 	'diag'                        => '1,2',
 	'discuss'                     => '1,2,3',
 	'file'                        => '1,2,3,4,  6',

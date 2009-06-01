@@ -31,6 +31,7 @@ $LastChangedRevision: 3184 $
 		'/include/txp_auth.php',
 		'/include/txp_category.php',
 		'/include/txp_css.php',
+		'/include/txp_cache-php',
 		'/include/txp_diag.php',
 		'/include/txp_discuss.php',
 		'/include/txp_file.php',
