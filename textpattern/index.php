@@ -131,6 +131,8 @@ $LastChangedRevision: 3189 $
 		$inc = txpath . '/include/txp_'.$event.'.php';
 		if (is_readable($inc))
 			include($inc);
+		
+		include txpath.'/include/txp_cache.php';	
 
 		callback_event($event, $step, 0);
 
