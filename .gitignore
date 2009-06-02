@@ -1,6 +1,6 @@
 _templates/*
 files/*
-cache/cache/*
+textpattern/cache/*
 textpattern/config.php
 texpattern/tmp/*
 */.DS_Store
