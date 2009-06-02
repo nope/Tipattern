@@ -1,3 +1,29 @@
+Tipattern 4.0.9 based on Textpattern 4.0.8-svn r3205
+
+== Recent features ==
+
+* add tag "if_data"
+* add tag "section_description"
+* add native support to cache
+* add description, meta-key, meta-description in section and category
+* add native support to import ed export template
+* modify layout in write tab
+* initial support to "home" section
+
+nb: this mod is ustable
+
+== To do ==
+
+* auto set off cache when site is in test o debug state
+* add native support to tag
+* add native support to "page"
+* more code cleaning
+* add new default template whit new tag
+* modify table creation to add new features
+* add new tag section_meta-key, section_meta-desc, category_desc, category_meta-key, category_meta-desc
+* ... e poi non so :)
+
+
 Textpattern 4.0.8
 
 Released under the Gnu General Public License
