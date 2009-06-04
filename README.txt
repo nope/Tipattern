@@ -1,4 +1,4 @@
-Tipattern 4.0.9 based on Textpattern 4.0.8-svn r3205
+Tipattern 4.0.9 based on Textpattern 4.0.8-svn r3207
 
 == Recent features ==
 
