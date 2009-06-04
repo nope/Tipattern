@@ -681,7 +681,7 @@ $LastChangedRevision: 3174 $
 				if (empty($form) && empty($thing))
 				{
 					$out[] = href(
-						htmlspecialchars($c['name']).' ('.htmlspecialchars($c['title']).')',
+						htmlspecialchars($c['name']).' ('.escape_title($c['title']).')',
 						permlinkurl($c).'#c'.$c['discussid']
 					);
 				}
