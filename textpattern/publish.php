@@ -850,7 +850,7 @@ $LastChangedRevision: 3187 $
 			}
 		}
 
-		if (!empty($thisarticle) and ($thisarticle['status'] == $status or gps('txpreview')))
+		if (!empty($thisarticle) and ($thisarticle['status'] >= $status or gps('txpreview')))
 		{
 			extract($thisarticle);
 			$thisarticle['is_first'] = 1;
