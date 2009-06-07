@@ -1,8 +1,8 @@
 _templates/*
 files/*
-textpattern/cache/*
+textpattern/cache
 textpattern/config.php
-texpattern/tmp/*
+texpattern/tmp
 */.DS_Store
 .DS_Store
 clean.sh
