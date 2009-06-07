@@ -586,7 +586,7 @@ $LastChangedRevision: 3187 $
 			'status'    => '4',
 			'pgonly'    => 0,
 			'searchall' => 1,
-			'searchsticky' => 0,
+			'searchsticky' => 1,
 			'allowoverride' => (!$q and !$iscustom),
 			'offset'    => 0,
 			'wraptag'	=> '',
@@ -710,12 +710,14 @@ $LastChangedRevision: 3187 $
 			$keywords = " and (" . join(' or ',$keyparts) . ")";
 		}
 
+		/* clean this section
 		if ($q and $searchsticky)
 			$statusq = ' and Status >= 4';
 		elseif ($id)
 			$statusq = ' and Status >= 4';
 		else
-			$statusq = ' and Status = '.intval($status);
+			$statusq = ' and Status = '.intval($status); */
+		$statusq = (!$searchsticky) ? ' and Status = '.intval($status) : ' and Status >= 4';
 
 		$where = "1=1" . $statusq. $time.
 			$search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
