@@ -266,7 +266,7 @@ $LastChangedRevision: 3187 $
 					// make it multibyte-safe without breaking backwards-compatibility
 					case urldecode(strtolower(urlencode(gTxt('section')))):
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; $is_404 = empty($out['s']); break;
-
+					
 					case urldecode(strtolower(urlencode(gTxt('category')))):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; $is_404 = empty($out['c']); break;
 
@@ -357,12 +357,17 @@ $LastChangedRevision: 3187 $
 						}
 				}
 			} else {
-				$out['s'] = 'home'; //cambiata default -> home correggere per le ricerche!!!!
+				if(!$out['s'] && !$out['c'] && !$out['q'] && !$out['s'] && !$out['author']) {
+					$out['s'] = 'home'; //esperimental home call
+				} else {
+					$out['s'] = 'default'; 
+				}
+				
 			}
 		}
 		else {
 			// Messy mode, but prevent to get the id for file_downloads
-			if ($out['id'] && !$out['s']) {
+			if ($out['id'] && !$out['s']) { 
 				$rs = lookupByID($out['id']);
 				$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
 				$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
