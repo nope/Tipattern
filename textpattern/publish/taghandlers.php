@@ -1133,20 +1133,26 @@ $LastChangedRevision: 3174 $
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
 
+		if (!$section & $permlink_mode = 'messy') {
+			return '<form method="get" action="'.hu.'?s=search"'.$id.'>'.
+				n.$out.
+				n.'</form>';
+		}
+		
 		if (!$section) {
-			return '<form method="get" action="'.hu.'"'.$id.'>'.
+			return '<form method="get" action="'.hu.'search"'.$id.'>'.
 				n.$out.
 				n.'</form>';
 		}
 
 		if ($permlink_mode != 'messy') {
-			return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'>'.
+			return '<form method="get" action="'.pagelinkurl(array('s' => $section ? $section : 'search')).'"'.$id.'>'.
 				n.$out.
 				n.'</form>';
 		}
 
 		return '<form method="get" action="'.hu.'"'.$id.'>'.
-			n.hInput('s', $section).
+			n.hInput('s', $section ? $section : 'search').
 			n.$out.
 			n.'</form>';
 	}
