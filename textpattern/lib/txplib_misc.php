@@ -1780,7 +1780,7 @@ $LastChangedRevision: 3188 $
 				prefs_id = 1"
 			);
     	} else {
-        	return safe_update('txp_prefs', "val = '$val'","name like '$name'");
+        	return safe_update('txp_prefs', "val = '$val'","name like '$name'" . ($user_name ? " AND $user_name" : ''));
     	}
 	}
 
