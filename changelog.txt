@@ -1,0 +1,33 @@
+Tipattern 4.0.9
+
+== Textpattern version ==
+
+Textpattern 4.0.8 r3208
+
+== Features ==
+
+* add tag "if_data"
+* add tag "home_article"
+* add tag "section_description"
+* add native support to cache
+* add cache cleaning when update site
+* add description, meta-key, meta-description in section and category
+* add native support to import ed export template
+* modify layout in write tab
+* support to "home" section
+* add gui to set home section
+* sticky article now are display by default and auto add to home section
+* search, category, section, author article page listing are now driven by default section
+* modify table creation to add new features
+
+
+== To do ==
+
+* auto set off cache when site is in test o debug state
+* change location of the cache setting 
+* add native support to tag
+* add native support to "page"
+* more code cleaning
+* add new default template whit new tag
+* add new tag section_meta-key, section_meta-desc, category_desc, category_meta-key, category_meta-desc
+* ... e poi non so :)

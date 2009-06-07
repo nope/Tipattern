@@ -2,7 +2,7 @@ _templates/*
 files/*
 textpattern/cache
 textpattern/config.php
-texpattern/tmp
+textpattern/tmp
 */.DS_Store
 .DS_Store
 clean.sh
