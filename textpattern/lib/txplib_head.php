@@ -54,7 +54,7 @@ $LastChangedRevision: 3182 $
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
 	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="datepicker.js"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="datepicker.css" />
 	<?php echo script_js(
 		"var textpattern = {event: '$event', step: '$step'};"
 	); ?>
@@ -173,101 +173,7 @@ $LastChangedRevision: 3182 $
 		addEvent(window, 'load', cleanSelects);
 	-->
 	</script>
-	<script type="text/javascript">
-	// <![CDATA[     
-
-	// A quick test of the setGlobalVars method 
-	datePickerController.setGlobalVars({"split":["-dd","-mm"]});
-
-	/* 
-
-	   The following function dynamically calculates Easter Monday's date.
-	   It is used as the "redraw" callback function for the second last calendar on the page
-	   and returns an empty object.
-
-	   It dynamically calculates Easter Monday for the year in question and uses
-	   the "adddisabledDates" method of the datePickercontroller Object to
-	   disable the date in question.
-
-	   NOTE: This function is not needed, it is only present to show you how you
-	   might use this callback function to disable dates dynamically!
-
-	*/
-	function disableEasterMonday(argObj) { 
-	        // Dynamically calculate Easter Monday - I've forgotten where this code 
-	        // was originally found and I don't even know if it returns a valid
-	        // result so don't use it in a prod environment...
-	        var y = argObj.yyyy,
-	            a=y%4,
-	            b=y%7,
-	            c=y%19,
-	            d=(19*c+15)%30,
-	            e=(2*a+4*b-d+34)%7,
-	            m=Math.floor((d+e+114)/31),
-	            g=(d+e+114)%31+1,            
-	            yyyymmdd = y + "0" + m + String(g < 10 ? "0" + g : g);         
-
-	        datePickerController.addDisabledDates(argObj.id, yyyymmdd); 
-
-	        // The redraw callback expects an Object as a return value
-	        // so we just give it an empty Object... 
-	        return {};
-	};
-
-	/* 
-
-	   The following functions updates a span with an "English-ised" version of the
-	   currently selected date for the last datePicker on the page. 
-
-	   NOTE: These functions are not needed, they are only present to show you how you
-	   might use callback functions to use the selected date in other ways!
-
-	*/
-	function createSpanElement(argObj) {
-	        // Make sure the span doesn't exist already
-	        if(document.getElementById("EnglishDate")) return;
-
-	        // create the span node dynamically...
-	        var spn = document.createElement('span');
-	            p   = document.getElementById(argObj.id).parentNode;
-
-	        spn.id = "EnglishDate";
-	        p.parentNode.appendChild(spn);
-
-	        // Remove the bottom margin on the input's wrapper paragraph
-	        p.style.marginBottom = "0";
-
-	        // Add a whitespace character to the span
-	        spn.appendChild(document.createTextNode(String.fromCharCode(160)));
-	};
-
-	function showEnglishDate(argObj) {
-	        // Grab the span & get a more English-ised version of the selected date
-	        var spn = document.getElementById("EnglishDate"),
-	            formattedDate = datePickerController.printFormattedDate(argObj.date, "l-cc-sp-d-S-sp-F-sp-Y", false);
-
-	        // Make sure the span exists before attempting to use it!
-	        if(!spn) {
-	                createSpanElement(argObj); 
-	                spn = document.getElementById("EnglishDate");
-	        };
-
-	        // Note: The 3rd argument to printFormattedDate is a Boolean value that 
-	        // instructs the script to use the imported locale (true) or not (false)
-	        // when creating the dates. In this case, I'm not using the imported locale
-	        // as I've used the "S" format mask, which returns the English ordinal
-	        // suffix for a date e.g. "st", "nd", "rd" or "th" and using an
-	        // imported locale would look strange if an English suffix was included
-
-	        // Remove the current contents of the span
-	        while(spn.firstChild) spn.removeChild(spn.firstChild);
-
-	        // Add a new text node containing our formatted date
-	        spn.appendChild(document.createTextNode(formattedDate));
-	};
-
-	// ]]>
-	</script>
+	
 	<?php
 	echo $theme->html_head();
 	callback_event('admin_side', 'head_end');

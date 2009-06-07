@@ -780,8 +780,8 @@ if (!empty($event) and $event == 'article') {
 					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp')).
 
 					n.graf(gtxt('date').sp.	
-						tsd('month', '%m', $persist_timestamp, "data-mm").' / '.
 						tsd('day', '%d', $persist_timestamp, "data-dd").' / '.
+						tsd('month', '%m', $persist_timestamp, "data-mm").' / '.
 						tsd('year', '%Y', $persist_timestamp, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks")
 					).
 
@@ -804,9 +804,9 @@ if (!empty($event) and $event == 'article') {
 					n.n.'<fieldset id="write-expires">'.
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
-					n.graf(gtxt('date').sp.
-						tsd('exp_month', '%m', $persist_timestamp, "data-mm").' / '.
+					n.graf(gtxt('date').sp.						
 						tsd('exp_day', '%d', $persist_timestamp, "data-dd").' / '.
+						tsd('exp_month', '%m', $persist_timestamp, "data-mm").' / '.
 						tsd('exp_year', '%Y', $persist_timestamp, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks")
 					).
 
@@ -848,8 +848,8 @@ if (!empty($event) and $event == 'article') {
 					n.graf(gTxt('published_at').sp.popHelp('timestamp')).
 
 					n.graf(gtxt('date').sp.
-						tsd('month', '%m', $sPosted, "data-mm").' / '.
 						tsd('day', '%d', $sPosted, "data-dd").' / '.
+						tsd('month', '%m', $sPosted, "data-mm").' / '.
 						tsd('year', '%Y', $sPosted, "data", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks")
 					).
 
@@ -883,8 +883,8 @@ if (!empty($event) and $event == 'article') {
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf(gtxt('date').sp.
-						tsd('exp_month', '%m', $sExpires, "expire-mm").' / '.
 						tsd('exp_day', '%d', $sExpires, "expire-dd").' / '.
+						tsd('exp_month', '%m', $sExpires, "expire-mm").' / '.
 						tsd('exp_year', '%Y', $sExpires, "expire", "split-date fill-grid statusformat-l-cc-sp-d-sp-F-sp-Y show-weeks")
 					).
 
