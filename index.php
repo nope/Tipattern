@@ -3,7 +3,7 @@
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.0/index.php $
 $LastChangedRevision: 3189 $
 */
-
+	
 	// Make sure we display all errors that occur during initialization
 	error_reporting(E_ALL);
 	@ini_set("display_errors","1");
