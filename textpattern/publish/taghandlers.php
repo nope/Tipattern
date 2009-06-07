@@ -32,7 +32,7 @@ $LastChangedRevision: 3174 $
 			$out .= gTxt('search_results').htmlspecialchars($separator.$q);
 		} elseif ($c) {
 			$out .= htmlspecialchars(fetch_category_title($c));
-		} elseif ($s and $s != 'default') {
+		} elseif ($s and $s != 'default' and $s != 'home') {
 			$out .= htmlspecialchars(fetch_section_title($s));
 		} elseif ($pg) {
 			$out .= gTxt('page').' '.$pg;
@@ -833,7 +833,7 @@ $LastChangedRevision: 3174 $
 
 		if ($type == 's')
 		{
-			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' and name != 'home' order by name");
 		}
 
 		else
@@ -867,7 +867,7 @@ $LastChangedRevision: 3174 $
 
 			if ($out)
 			{
-				$section = ($this_section) ? ( $s == 'default' ? '' : $s) : $section;
+				$section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s) : $section;
 
 				$out = n.'<select name="'.$type.'" onchange="submit(this.form);">'.
 					n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'>&nbsp;</option>'.
@@ -959,14 +959,14 @@ $LastChangedRevision: 3174 $
 					extract($qs);
 
 					$rs = safe_rows_start('name, title', 'txp_category',
-						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));
+						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' and name != 'home' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));
 				}
 			}
 
 			else
 			{
 				$rs = safe_rows_start('name, title', 'txp_category',
-					"type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC'));
+					"type = '".doSlash($type)."' and name not in('default','home',root') $exclude $shallow order by ".($sort ? $sort : 'name ASC'));
 			}
 		}
 
@@ -984,7 +984,7 @@ $LastChangedRevision: 3174 $
 
 				if ($name)
 				{
-					$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+					$section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 
 					if (empty($form) && empty($thing))
 					{
@@ -1058,12 +1058,12 @@ $LastChangedRevision: 3174 $
 				$exclude = "and name not in('$exclude')";
 			}
 
-			$rs = safe_rows('name, title', 'txp_section', "name != 'default' $exclude order by ".($sort ? $sort : 'name ASC'));
+			$rs = safe_rows('name, title', 'txp_section', "name != 'default' and name != 'home' $exclude order by ".($sort ? $sort : 'name ASC'));
 		}
 
 		if ($include_default)
 		{
-			array_unshift($rs, array('name' => 'default', 'title' => $default_title));
+			array_unshift($rs, array('name' => 'default', 'title' => $default_title, 'name' => 'home', 'title' => $default_title)); //fixme add home title
 		}
 
 		if ($rs)
@@ -1089,7 +1089,7 @@ $LastChangedRevision: 3174 $
 				}
 				else
 				{
-					$thissection = array('name' => $name, 'title' => ($name == 'default') ? $default_title : $title);
+					$thissection = array('name' => $name, 'title' => ($name == 'default' or $name == 'home') ? $default_title : $title); //fixme add home title
 					$thissection['is_first'] = ($count == 1);
 					$thissection['is_last'] = ($count == $last);
 					$out[] = ($thing) ? parse($thing) : parse_form($form);
@@ -1971,7 +1971,7 @@ $LastChangedRevision: 3174 $
 
 		$author_name = get_author_name($thisarticle['authorid']);
 
-		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+		$section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 
 		return ($link) ?
 			href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) :
@@ -2077,7 +2077,7 @@ $LastChangedRevision: 3174 $
 
 		if ($thisarticle['category1'])
 		{
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			$section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 			$category = $thisarticle['category1'];
 
 			$label = htmlspecialchars(($title) ? fetch_category_title($category) : $category);
@@ -2127,7 +2127,7 @@ $LastChangedRevision: 3174 $
 
 		if ($thisarticle['category2'])
 		{
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			$section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 			$category = $thisarticle['category2'];
 
 			$label = htmlspecialchars(($title) ? fetch_category_title($category) : $category);
@@ -2194,7 +2194,7 @@ $LastChangedRevision: 3174 $
 
 		if ($category)
 		{
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			$section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 			$label = htmlspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
 
 			$href = pagelinkurl(array('s' => $section, 'c' => $category));
@@ -2888,7 +2888,7 @@ $LastChangedRevision: 3174 $
 
 		$content = array();
 		extract($pretext);
-		if(!empty($s) && $s!= 'default')
+		if(!empty($s) && $s!= 'default' && $s!= 'home')
 		{
 			$section_title = ($title) ? fetch_section_title($s) : $s;
 			$section_title_html = escape_title($section_title);
@@ -3040,12 +3040,12 @@ $LastChangedRevision: 3174 $
 			'name' => FALSE,
 		),$atts));
 
-		$section = ($s == 'default' ? '' : $s);
+		$section = (($s == 'default' || $s == 'home') ? '' : $s);
 
 		if ($section)
 			return parse(EvalElse($thing, $name === FALSE or in_list($section, $name)));
 		else
-			return parse(EvalElse($thing, $name !== FALSE and (in_list('', $name) or in_list('default', $name))));
+			return parse(EvalElse($thing, $name !== FALSE and (in_list('', $name) or in_list('default', $name) or in_list('home', $name))));
 
 	}
 

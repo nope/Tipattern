@@ -604,10 +604,10 @@ $LastChangedRevision: 3187 $
 		if (!$iscustom)
 		{
 			$theAtts['category'] = ($c)? $c : '';
-			$theAtts['section'] = ($s && $s!='default')? $s : '';
+			$theAtts['section'] = ($s && $s!='default' && $s!='home')? $s : '';
 			$theAtts['author'] = (!empty($author)? $author: '');
 			$theAtts['month'] = (!empty($month)? $month: '');
-			$theAtts['frontpage'] = ($s && $s=='default')? true: false;
+			$theAtts['frontpage'] = ($s && $s=='default' && $s!='home')? true: false;
 			$theAtts['excerpted'] = '';
 		}
 		extract($theAtts);
@@ -883,6 +883,12 @@ $LastChangedRevision: 3187 $
 	}
 
 // -------------------------------------------------------------
+	function home_article($atts, $thing = NULL)
+	{
+		return doHomeArticles($atts, $thing);
+	}
+
+// -------------------------------------------------------------
 	function parseArticles($atts, $iscustom = 0, $thing = NULL)
 	{
 		global $pretext, $is_article_list;
@@ -945,7 +951,7 @@ $LastChangedRevision: 3187 $
 		$q = array(
 			"select ID, Title, url_title, unix_timestamp(Posted) as uposted
 			from ".$safe_name." where Posted $type '".doSlash($Posted)."'",
-			($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
+			($s!='' && $s!='default' && $s!='home') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
 			'and Status=4 and Posted < now()'.$expired.' order by Posted',
 			($type=='<') ? 'desc' : 'asc',
 			'limit 1'
@@ -1255,5 +1261,135 @@ $LastChangedRevision: 3187 $
 
 		return $o;
 	}
+
+// -------------------------------------------------------------
+		function doHomeArticles($atts, $thing = NULL)
+		{
+			global $pretext, $prefs;
+			extract($pretext);
+			extract($prefs);
+			$customFields = getCustomFields();
+			$customlAtts = array_null(array_flip($customFields));
+
+			//getting attributes
+			$theAtts = lAtts(array(
+				'form'      => 'default',
+				'listform'  => '',
+				'searchform'=> '',
+				'limit'     => 10,
+				'category'  => '',
+				'section'   => '',
+				'excerpted' => '',
+				'author'    => '',
+				'sort'      => '',
+				'month'     => '',
+				'keywords'  => '',
+				'frontpage' => '',
+				'time'      => 'past',
+				'pgonly'    => 0,
+				'searchall' => 1,
+				'allowoverride' => true,
+				'offset'    => 0,
+				'wraptag'	=> '',
+				'break'		=> '',
+				'label'		=> '',
+				'labeltag'	=> '',
+				'class'		=> ''
+			)+$customlAtts,$atts);
+
+			
+				$theAtts['category'] = ($c)? $c : '';
+				$theAtts['section'] = ($s && $s!='default' && $s!='home')? $s : '';
+				$theAtts['author'] = (!empty($author)? $author: '');
+				$theAtts['month'] = (!empty($month)? $month: '');
+				$theAtts['frontpage'] = ($s && $s=='home')? true: false;
+				$theAtts['excerpted'] = '';
+			
+			extract($theAtts);
+
+			// if a listform is specified, $thing is for doArticle() - hence ignore here.
+			if (!empty($listform)) $thing = '';
+
+			$pageby = (empty($pageby) ? $limit : $pageby);
+
+			$match = $search = '';
+			if (!$sort) $sort = 'Posted desc';
+
+			//Building query parts
+			$frontpage = filterFrontPage();
+			$category  = join("','", doSlash(do_list($category)));
+			$category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
+			$section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list($section)))."')";
+			$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
+			$author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
+			$month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
+			$id        = (!$id)        ? '' : " and ID IN (".join(',', array_map('intval', do_list($id))).")";
+			switch ($time) {
+				case 'any':
+					$time = ""; break;
+				case 'future':
+					$time = " and Posted > now()"; break;
+				default:
+					$time = " and Posted <= now()";
+			}
+			if (!$publish_expired_articles) {
+				$time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
+			}
+
+			$custom = '';
+
+			if ($customFields) {
+				foreach($customFields as $cField) {
+					if (isset($atts[$cField]))
+						$customPairs[$cField] = $atts[$cField];
+				}
+				if(!empty($customPairs)) {
+					$custom = buildCustomSql($customFields,$customPairs);
+				}
+			}
+
+			$statusq = ' and Status = 5';
+
+			$where = "1=1" . $statusq. $time.
+				$search . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
+
+			$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod".$match, 'textpattern',
+			$where.' order by '.doSlash($sort).' limit 0'.intval($limit));
+			// get the form name
+				$fname = ($listform ? $listform : $form);
+
+			if ($rs) {
+				$count = 0;
+				$last = numRows($rs);
+
+				$articles = array();
+				while($a = nextRow($rs)) {
+					++$count;
+					populateArticleData($a);
+					global $thisarticle, $uPosted, $limit;
+					$thisarticle['is_first'] = ($count == 1);
+					$thisarticle['is_last'] = ($count == $last);
+
+					if (@constant('txpinterface') === 'admin' and gps('Form')) {
+						$articles[] = parse(gps('Form'));
+					}
+					elseif ($allowoverride and $a['override_form']) {
+						$articles[] = parse_form($a['override_form']);
+					}
+					else {
+						$articles[] = ($thing) ? parse($thing) : parse_form($fname);
+					}
+
+					// sending these to paging_link(); Required?
+					$uPosted = $a['uPosted'];
+
+					unset($GLOBALS['thisarticle']);
+				}
+
+				return doLabel($label, $labeltag).doWrap($articles, $wraptag, $break, $class);
+			}
+		}
+
+
 
 ?>

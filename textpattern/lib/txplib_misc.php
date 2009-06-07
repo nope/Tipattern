@@ -1639,7 +1639,7 @@ $LastChangedRevision: 3188 $
 			return $thissection['title'];
 		}
 
-		if($name == 'default' or empty($name))
+		if($name == 'default' or empty($name) or $name == 'home')
 			return '';
 
 		$f = safe_field('title','txp_section',"name='".doSlash($name)."'");
@@ -1915,7 +1915,7 @@ eod;
 			unset($keys['id']);
 		}
 
-		if (@$keys['s'] == 'default')
+		if (@$keys['s'] == 'default' or @$keys['s'] == 'home')
 		{
 			unset($keys['s']);
 		}

@@ -34,6 +34,7 @@ $LastChangedRevision: 3203 $
 		pagetop(gTxt('sections'), $message);
 
 		$default = safe_row('page, css', 'txp_section', "name = 'default'");
+		$home = safe_row('page, css', 'txp_section', "name = 'home'");
 
 		$pages = safe_column('name', 'txp_page', "1 = 1");
 		$styles = safe_column('name', 'txp_css', "1 = 1");
@@ -53,6 +54,46 @@ $LastChangedRevision: 3203 $
 				, ' colspan="3"')
 			).
 
+			n.n.tr(
+				td(gTxt('home')).
+
+				td(
+					form(
+						'<table>'.
+
+						tr(
+							fLabelCell(gTxt('uses_page').':').
+							td(
+								selectInput('page', $pages, $home['page']).sp.popHelp('section_uses_page')
+							, '', 'noline')
+						).
+
+						tr(
+							fLabelCell(gTxt('uses_style').':') .
+							td(
+								selectInput('css', $styles, $home['css']).sp.popHelp('section_uses_css')
+							, '', 'noline')
+						).
+
+						pluggable_ui('section_ui', 'extend_detail_form', '', $home).
+
+						tr(
+							tda(
+								fInput('submit', '', gTxt('save_button'), 'smallerbox').
+								eInput('section').
+								sInput('section_save').
+								hInput('name','home')
+							, ' colspan="2" class="noline"')
+						).
+
+						endTable()
+					)
+				).
+
+				td()
+				
+			).
+			
 			n.n.tr(
 				td(gTxt('default')).
 
@@ -90,6 +131,7 @@ $LastChangedRevision: 3203 $
 				).
 
 				td()
+				
 			);
 
 		$rs = safe_rows_start('*', 'txp_section', "name != 'default' AND name != 'home' order by name");
@@ -289,9 +331,9 @@ $LastChangedRevision: 3203 $
 			}
 		}
 
-		if ($name == 'default')
+		if ($name == 'default' or $name == 'home')
 		{
-			safe_update('txp_section', "page = '$page', css = '$css'", "name = 'default'");
+			safe_update('txp_section', "page = '$page', css = '$css'", "name = '$name'");
 
 			update_lastmod();
 		}

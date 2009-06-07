@@ -1025,7 +1025,7 @@ if (!empty($event) and $event == 'article') {
 
 	function section_popup($Section, $id)
 	{
-		$rs = safe_column('name', 'txp_section', "name != 'default'");
+		$rs = safe_column('name', 'txp_section', "name != 'default' and name != 'home'");
 
 		if ($rs)
 		{
@@ -1057,7 +1057,7 @@ if (!empty($event) and $event == 'article') {
 	{
 		$arr = array(' ');
 
-		$rs = safe_column('name', 'txp_form', "type = 'article' and name != 'default' order by name");
+		$rs = safe_column('name', 'txp_form', "type = 'article' and name != 'default' and name != 'home' order by name");
 
 		if ($rs)
 		{
