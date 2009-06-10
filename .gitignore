@@ -1,6 +1,6 @@
-textpattern/cache
+textpattern/cache/*
 textpattern/config.php
-textpattern/tmp
+textpattern/tmp/*
 */.DS_Store
 .DS_Store
 */.svn
