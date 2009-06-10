@@ -241,7 +241,18 @@
         {
         	$GLOBALS["JPCACHE_USE_GZIP"]  = 0;
         }
-
+				
+				/* Fixme don't work :(
+				Forze cahce off when status of site il debug or test
+				global $production_status;
+				if ($production_status == 'debug' || $production_status == 'test') {
+					$GLOBALS["JPCACHE_ON"] = 0;
+					jpcache_do_gc(true);
+					//echo $GLOBALS["JPCACHE_ON"];
+				//} else { echo $production_status;
+				}*/ 
+				
+				
         // Force cache off when POST occured when you don't want it cached
         if (!$GLOBALS["JPCACHE_POST"] && (count($_POST) > 0)) 
         {

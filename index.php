@@ -40,7 +40,7 @@ $LastChangedRevision: 3189 $
 		txp_status_header('503 Service Unavailable');
 		exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
 	}
-
+ 
 	include txpath.'/lib/txp_cache/cache.php'; // aggiunta la cache
 	include txpath.'/publish.php';
 	textpattern();

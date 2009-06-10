@@ -11,7 +11,7 @@
 								   // see help of admin-side plugin.
 
     $JPCACHE_TIME         =   900; // Default number of seconds to cache a page
-    $JPCACHE_DEBUG        =   0;   // Turn debugging on/off
+    $JPCACHE_DEBUG        =   1;   // Turn debugging on/off
     $JPCACHE_ON           =   1;   // Turn caching on/off
     $JPCACHE_USE_GZIP     =   1;   // Whether or not to use GZIP
     $JPCACHE_GZIP_LEVEL   =   6;   // GZIPcompressionlevel to use (1=low,9=high)

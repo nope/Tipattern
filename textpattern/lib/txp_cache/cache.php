@@ -37,7 +37,7 @@
     $includedir = txpath.'/lib/txp_cache';
 
     // Configuration file
-    require "$includedir/cache-config.php";
+    require "$includedir/cache-config.php"; 
     
     // Standard functions
     require "$includedir/cache-main.php";
