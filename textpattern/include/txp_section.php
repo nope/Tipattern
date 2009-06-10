@@ -55,11 +55,11 @@ $LastChangedRevision: 3203 $
 			).
 
 			n.n.tr(
-				td(gTxt('home')).
+				tda(gTxt('home'),' onclick="toggleDisplay(\'section_home\'); return false;"').
 
 				td(
 					form(
-						'<table>'.
+						'<table id="section_home">'.
 
 						tr(
 							fLabelCell(gTxt('uses_page').':').
@@ -95,11 +95,11 @@ $LastChangedRevision: 3203 $
 			).
 			
 			n.n.tr(
-				td(gTxt('default')).
+				tda(gTxt('default'),' onclick="toggleDisplay(\'section_default\'); return false;"').
 
 				td(
 					form(
-						'<table>'.
+						'<table id="section_default">'.
 
 						tr(
 							fLabelCell(gTxt('uses_page').':').
@@ -143,11 +143,11 @@ $LastChangedRevision: 3203 $
 				extract($a);
 
 				echo n.n.tr(
-					n.td($name).
+					n.tda($name,' onclick="toggleDisplay(\'section_'.$name.'\'); return false;"').
 
 					n.td(
 						form(
-							'<table>'.
+							'<table id="section_'.$name.'">'.
 
 							n.n.tr(
 								fLabelCell(gTxt('section_name').':').
@@ -235,7 +235,7 @@ $LastChangedRevision: 3203 $
 					td(
 						dLink('section', 'section_delete', 'name', $name, '', 'type', 'section')
 					),
-					" id=\"section-$name\""
+					" id=\"section-$name\" class=\"jsection\" "
 				);
 			}
 		}
