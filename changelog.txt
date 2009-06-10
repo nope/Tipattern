@@ -2,7 +2,7 @@ Tipattern 4.0.9
 
 == Textpattern version ==
 
-Textpattern 4.0.8 r3208
+Textpattern 4.0.8 r3215
 
 == Features ==
 
@@ -19,6 +19,7 @@ Textpattern 4.0.8 r3208
 * sticky article now are display by default and auto add to home section
 * search, category, section, author article page listing are now driven by default section
 * modify table creation to add new features
+* add datepicker script to write tab
 
 
 == To do ==
