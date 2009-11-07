@@ -6,8 +6,8 @@
 
 	Use of this software denotes acceptance of the Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/publish/search.php $
-$LastChangedRevision: 2812 $
+$HeadURL$
+$LastChangedRevision$
 
 */
 

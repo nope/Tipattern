@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/include/txp_diag.php $
-$LastChangedRevision: 3184 $
+$HeadURL$
+$LastChangedRevision$
 
 */
 
@@ -25,6 +25,7 @@ $LastChangedRevision: 3184 $
 
 	$files = array(
 		'/../index.php',
+		'/../css.php',
 		'/css.php',
 		'/include/txp_admin.php',
 		'/include/txp_article.php',
@@ -83,6 +84,7 @@ $LastChangedRevision: 3184 $
 		'/update/_to_4.0.6.php',
 		'/update/_to_4.0.7.php',
 		'/update/_to_4.0.8.php',
+		'/update/_to_4.2.0.php',
 		'/update/_update.php'
 	);
 
@@ -402,7 +404,8 @@ $LastChangedRevision: 3184 $
 			$gd_support[] = 'GIF';
 		}
 
-		if ($gd_info['JPG Support']) {
+		 // Aside: In PHP 5.3, they chose to add a previously unemployed capital "E" to the array key.
+		 if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
 			$gd_support[] = 'JPG';
 		}
 
@@ -471,15 +474,17 @@ $LastChangedRevision: 3184 $
 
 		gTxt('web_domain').cs.$siteurl.n,
 
-		(getenv('TZ')) ? 'TZ: '.getenv('TZ').n : '',
-
 		gTxt('php_version').cs.phpversion().n,
 
 		($is_register_globals) ? gTxt('register_globals').cs.$is_register_globals.n : '',
 
 		gTxt('gd_library').cs.$gd.n,
 
+		gTxt('server').' TZ: '.(timezone::is_supported() ? date_default_timezone_get() : ((getenv('TZ')) ? getenv('TZ') : '-')).n,
 		gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
+		strip_tags(gTxt('is_dst')).cs.$is_dst.n,
+		strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
+		strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
 		'MySQL'.cs.mysql_get_server_info().n,
 
@@ -544,6 +549,10 @@ $LastChangedRevision: 3184 $
 		if ($table_msg == array())
 			$table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
 		$out[] = count($table_names).' Tables'.cs. implode(', ',$table_msg).n;
+
+		$cf = preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`'));
+		$out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('custom').cs.
+					implode(', ', $cf).sp.'('.count($cf).')'.n;
 
 		$extns = get_loaded_extensions();
 		$extv = array();

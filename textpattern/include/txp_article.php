@@ -6,8 +6,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/include/txp_article.php $
-$LastChangedRevision: 3183 $
+$HeadURL$
+$LastChangedRevision$
 
 */
 
@@ -86,7 +86,14 @@ if (!empty($event) and $event == 'article') {
 				return;
 			}
 
-			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
+			$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+
+			if ($ts === false || $ts === -1) { // Tracking the PHP meanders on how to return an error
+				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
+				return;
+			}
+
+			$when = $when_ts = $ts - tz_offset($ts);
 			$when = "from_unixtime($when)";
 		}
 
@@ -103,8 +110,8 @@ if (!empty($event) and $event == 'article') {
 			if(empty($exp_minute)) $exp_minute=0;
 			if(empty($exp_second)) $exp_second=0;
 
-			$expires = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.
-					$exp_hour.':'.$exp_minute.':'.$exp_second)-tz_offset();
+			$ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
+			$expires = $ts - tz_offset($ts);
 			$whenexpires = "from_unixtime($expires)";
 		}
 
@@ -220,7 +227,14 @@ if (!empty($event) and $event == 'article') {
 				return;
 			}
 
-			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
+			$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+
+			if ($ts === false || $ts === -1) {
+				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
+				return;
+			}
+
+			$when = $when_ts = $ts - tz_offset($ts);
 			$whenposted = "Posted=from_unixtime($when)";
 		}
 
@@ -234,7 +248,8 @@ if (!empty($event) and $event == 'article') {
 			if(empty($exp_minute)) $exp_minute=0;
 			if(empty($exp_second)) $exp_second=0;
 
-			$expires = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second)-tz_offset();
+			$ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
+			$expires = $ts - tz_offset($ts);
 			$whenexpires = "Expires=from_unixtime($expires)";
 		}
 
@@ -299,7 +314,6 @@ if (!empty($event) and $event == 'article') {
 				do_pings();
 			}
 			update_lastmod();
-			
 		}
 
 		$s = check_url_title($url_title);
@@ -354,7 +368,7 @@ if (!empty($event) and $event == 'article') {
 			);
 
 			extract($rs);
-			$reset_time = $publish_now = ($Status < 4);
+			$reset_time = $publish_now = ($Status < 4) && ($sPosted <= time());
 
 		} else {
 
@@ -429,7 +443,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- markup help --------------
 
-			echo pluggable_ui('article_ui', 'sidehelp', side_help($textile_body, $textile_excerpt));
+			echo pluggable_ui('article_ui', 'sidehelp', side_help($textile_body, $textile_excerpt), $rs);
 
 		//-- custom menu entries --------------
 
@@ -437,7 +451,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- advanced --------------
 
-			echo '<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>'.
+			echo '<h3 class="plain lever'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
 				'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
@@ -487,14 +501,15 @@ if (!empty($event) and $event == 'article') {
 
 		//-- recent articles --------------
 
-			echo '<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			echo '<h3 class="plain lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
+			$ra = '';
 
 			if ($recents)
 			{
-				echo '<ul class="plain-list">';
+				$ra = '<ul class="plain-list">';
 
 				while($recent = nextRow($recents))
 				{
@@ -503,11 +518,12 @@ if (!empty($event) and $event == 'article') {
 						$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
 					}
 
-					echo n.t.'<li><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
+					$ra .= n.t.'<li><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
 				}
 
-				echo '</ul>';
+				$ra .= '</ul>';
 			}
+			echo pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
 
 			echo '</div>';
 		}
@@ -711,7 +727,7 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 		//-- "More" section
-			echo n.n.'<h3 class="plain"><a href="#more" onclick="toggleDisplay(\'more\'); return false;">'.gTxt('more').'</a></h3>',
+			echo n.n.'<h3 class="plain lever'.(get_pref('pane_article_more_visible') ? ' expanded' : '').'"><a href="#more">'.gTxt('more').'</a></h3>',
 				'<div id="more" class="toggle" style="display:'.(get_pref('pane_article_more_visible') ? 'block' : 'none').'">';
 
 		//-- comments stuff --------------
@@ -911,7 +927,17 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-		echo '</td></tr></table></form>';
+		echo '</td></tr></table></form>'.n;
+		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time"
+		echo script_js( <<<EOS
+		$('#write-timestamp input.edit').change(
+			function() {
+				$('#publish_now').attr('checked', false);
+				$('#reset_time').attr('checked', false);
+			});
+EOS
+);
+
 
 	}
 
@@ -943,8 +969,8 @@ if (!empty($event) and $event == 'article') {
 		if ($textile_body == USE_TEXTILE or $textile_excerpt == USE_TEXTILE)
 		{
 			return n.hed(
-				'<a href="#textile_help" onclick="toggleDisplay(\'textile_help\'); return false;">'.gTxt('textile_help').'</a>'
-			, 3, ' class="plain"').
+				'<a href="#textile_help">'.gTxt('textile_help').'</a>'
+			, 3, ' class="plain lever'.(get_pref('pane_article_textile_help_visible') ? ' expanded' : '').'"').
 
 				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('pane_article_textile_help_visible') ? 'block' : 'none').'">'.
 

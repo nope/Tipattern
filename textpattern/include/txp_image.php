@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/include/txp_image.php $
-$LastChangedRevision: 3199 $
+$HeadURL$
+$LastChangedRevision$
 
 */
 
@@ -977,7 +977,7 @@ $LastChangedRevision: 3199 $
 
 				// check jpg support
 				case '.jpg':
-					return ($gd_info['JPG Support'] == 1) ? true : false;
+					return (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) ? true : false;
 				break;
 
 				// unsupported format

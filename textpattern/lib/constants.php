@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/constants.php $
-$LastChangedRevision: 3133 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 $old_level = error_reporting(E_ALL ^ (E_NOTICE));

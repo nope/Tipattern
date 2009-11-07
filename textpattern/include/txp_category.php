@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance ofthe Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/include/txp_category.php $
-$LastChangedRevision: 3203 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');

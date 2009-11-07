@@ -32,8 +32,8 @@
  */
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/class.thumb.php $
-$LastChangedRevision: 3107 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 $verbose = false;

@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/txplib_theme.php $
-$LastChangedRevision: 3212 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 if (!defined ('THEME')) define('THEME', 'theme/');
@@ -96,7 +96,7 @@ class theme
 		if (!$instance)
 		{
 			set_pref('theme_name', 'classic');
-			die(gTxt('cannot_instantiate_theme', array('name' => $name, 'class' => "{$name}_theme", 'path' => theme::path($name))));
+			die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name))));
 		}
 
 		return $instance;
@@ -146,7 +146,7 @@ class theme
 			set_pref('theme_name', 'classic');
 			if ($production_status === 'debug')
 			{
-				echo gTxt('cannot_instantiate_theme', array('name' => $name, 'class' => "{$name}_theme", 'path' => theme::path($name)));
+				echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name)));
 			}
 			return false;
 		}

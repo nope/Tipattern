@@ -9,8 +9,8 @@
  */
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/classTextile.php $
-$LastChangedRevision: 2812 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 /*
@@ -228,7 +228,7 @@ class Textile
 	var $hu = '';
 
 	var $ver = '2.0.0';
-	var $rev = '$Rev: 2812 $';
+	var $rev = '$Rev$';
 
 	var $doc_root;
 

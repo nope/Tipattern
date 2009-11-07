@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/txplib_misc.php $
-$LastChangedRevision: 3188 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 // -------------------------------------------------------------
@@ -84,16 +84,18 @@ $LastChangedRevision: 3188 $
 	}
 
 // -------------------------------------------------------------
-// deprecated, use htmlspecialchars instead. Remove in crockery
+// deprecated in 4.2.0
 	function escape_output($str)
 	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'htmlspecialchars')), E_USER_NOTICE);
 		return htmlspecialchars($str);
 	}
 
 // -------------------------------------------------------------
-// unused function => deprecate and remove in crockery?
+// deprecated in 4.2.0
 	function escape_tags($str)
 	{
+		trigger_error(gTxt('deprecated_function', array('{name}' => __FUNCTION__)), E_USER_NOTICE);
 		return strtr($str,
 			array(
 				'<' => '&#60;',
@@ -395,6 +397,17 @@ $LastChangedRevision: 3188 $
 	}
 
 // -------------------------------------------------------------
+	function remote_addr()
+	{
+		$ip = serverSet('REMOTE_ADDR');
+		if (($ip == '127.0.0.1' || $ip == serverSet('SERVER_ADDR')) && serverSet('HTTP_X_FORWARDED_FOR')) {
+			$ips = explode(', ', serverSet('HTTP_X_FORWARDED_FOR'));
+			$ip = $ips[0];
+		}
+		return $ip;
+	}
+
+// -------------------------------------------------------------
  	function pcs($thing) //	Get a var from POST or COOKIE; if not, create it
 	{
 		if (isset($_COOKIE["txp_".$thing])) {
@@ -561,6 +574,7 @@ $LastChangedRevision: 3188 $
 				$dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
 			$files = glob($dir.'*.php');
 			if ($files) {
+				natsort($files);
 				foreach ($files as $f) {
 					load_plugin(basename($f, '.php'));
 				}
@@ -633,7 +647,7 @@ $LastChangedRevision: 3188 $
 	{
 		global $plugin_areas;
 
-		if ($GLOBALS['event'] !== 'plugin')
+		if (!isset($GLOBALS['event']) || ($GLOBALS['event'] !== 'plugin'))
 		{
 			$plugin_areas[$area][$title] = $event;
 		}
@@ -653,17 +667,19 @@ $LastChangedRevision: 3188 $
 	}
 
 // -------------------------------------------------------------
-// deprecated, use lAtts instead. Remove in crockery
+	// deprecated in 4.2.0
 	function getAtt($name, $default=NULL)
 	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
 		global $theseatts;
 		return isset($theseatts[$name]) ? $theseatts[$name] : $default;
 	}
 
 // -------------------------------------------------------------
-	// deprecated, use lAtts instead. Remove in crockery
+	// deprecated in 4.2.0
 	function gAtt(&$atts, $name, $default=NULL)
 	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
 		return isset($atts[$name]) ? $atts[$name] : $default;
 	}
 
@@ -1236,16 +1252,18 @@ $LastChangedRevision: 3188 $
 
 // -------------------------------------------------------------
 // Calculate the offset between the server local time and the
-// user's selected time zone
-	function tz_offset()
+// user's selected time zone at a given point in time
+	function tz_offset($timestamp = NULL)
 	{
-		global $gmtoffset, $is_dst;
+		global $gmtoffset, $timezone_key;
 
-		extract(getdate());
-		$serveroffset = gmmktime(0,0,0,$mon,$mday,$year) - mktime(0,0,0,$mon,$mday,$year);
-		$offset = $gmtoffset - $serveroffset;
+		if (is_null($timestamp)) $timestamp = time();
 
-		return $offset + ($is_dst ? 3600 : 0);
+		extract(getdate($timestamp));
+		$serveroffset = gmmktime($hours,$minutes,0,$mon,$mday,$year) - mktime($hours,$minutes,0,$mon,$mday,$year);
+
+		$real_dst = timezone::is_dst($timestamp, $timezone_key);
+		return $gmtoffset - $serveroffset + ($real_dst ? 3600 : 0);
 	}
 
 // -------------------------------------------------------------
@@ -1278,7 +1296,7 @@ $LastChangedRevision: 3188 $
 		elseif ($gmt)
 			$str = gmstrftime($format, $time);
 		else
-			$str = strftime($format, $time + tz_offset());
+			$str = strftime($format, $time + tz_offset($time));
 
 		@list($lang, $charset) = explode('.', $locale);
 		if (empty($charset))
@@ -1309,7 +1327,8 @@ $LastChangedRevision: 3188 $
 // Convert a time string from the Textpattern time zone to GMT
 	function safe_strtotime($time_str)
 	{
-		return strtotime($time_str, time()+tz_offset()) - tz_offset();
+		$ts = strtotime($time_str);
+		return strtotime($time_str, time() + tz_offset($ts)) - tz_offset($ts);
 	}
 
 // -------------------------------------------------------------
@@ -1397,11 +1416,15 @@ $LastChangedRevision: 3188 $
 	{
 
 		if ($level == 'debug') {
-			error_reporting(E_ALL);
+			error_reporting(E_ALL /* TODO: Enable E_STRICT in debug mode/PHP5.x? | (defined('E_STRICT') ? E_STRICT : 0) */);
 		}
 		elseif ($level == 'live') {
 			// don't show errors on screen
-			error_reporting(E_ALL ^ (E_WARNING | E_NOTICE));
+			$suppress = E_WARNING | E_NOTICE;
+			 // E_STRICT is defined since PHP 5.x and is a member of E_ALL in PHP 6.x. Now handle that!
+			if (defined('E_STRICT') && (E_ALL & E_STRICT)) $suppress |= E_STRICT;
+			if (defined('E_DEPRECATED')) $suppress |= E_DEPRECATED;
+			error_reporting(E_ALL ^ $suppress);
 			@ini_set("display_errors","1");
 		}
 		else {
@@ -1639,7 +1662,7 @@ $LastChangedRevision: 3188 $
 			return $thissection['title'];
 		}
 
-		if($name == 'default' or empty($name) or $name == 'home')
+		if($name == 'default' or empty($name))
 			return '';
 
 		$f = safe_field('title','txp_section',"name='".doSlash($name)."'");
@@ -1839,6 +1862,8 @@ $LastChangedRevision: 3188 $
 		if ($status and $parts = @explode(' ', $status, 2)) {
 			$code = @$parts[0];
 		}
+
+		callback_event('txp_die', $code);
 
 		if (@$GLOBALS['connected']) {
 			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
@@ -2289,7 +2314,7 @@ eod;
 		);
 
 		// backfill default response properties
-		$response =  doSpecial($response) + $default_response;
+		$response = $response + $default_response;
 
 		header('Content-Type: text/xml');
 		txp_status_header($response['http-status']);
@@ -2297,6 +2322,8 @@ eod;
 		$out[] = '<textpattern>';
 		foreach ($response as $element => $value)
 		{
+			// element *names* must not contain <>&, *values* may.
+			$value = doSpecial($value);
 			if (is_array($value))
 			{
 				$out[] = t."<$element>".n;
@@ -2366,5 +2393,211 @@ eod;
 				return $out;
 			}
 		}
-	
+// -------------------------------------------------------------
+// Perform regular housekeeping.
+// Might evolve into some kind of pseudo-cron later...
+	function janitor()
+	{
+		global $prefs;
+
+		// update DST setting
+		global $auto_dst, $timezone_key, $is_dst;
+		if ($auto_dst && $timezone_key)
+		{
+			$is_dst = timezone::is_dst(time(), $timezone_key);
+			if ($is_dst != $prefs['is_dst'])
+			{
+				$prefs['is_dst'] = $is_dst;
+				set_pref('is_dst', $is_dst, 'publish', 2);
+			}
+		}
+	}
+
+// -------------------------------------------------------------
+// Dealing with timezones.
+	class timezone
+	{
+		/* private */
+		var $_details;
+		var $_offsets;
+
+		/**
+		 * Constructor
+		 */
+		function timezone()
+		{
+			// are we riding a dinosaur?
+			if (!timezone::is_supported())
+            {
+            	// Standard time zones as compiled by H.M. Nautical Almanac Office, June 2004
+	            // http://aa.usno.navy.mil/faq/docs/world_tzones.html
+	            $timezones = array(
+	                -12, -11, -10, -9.5, -9, -8.5, -8, -7, -6, -5, -4, -3.5, -3, -2, -1,
+	                0,
+	                +1, +2, +3, +3.5, +4, +4.5, +5, +5.5, +6, +6.5, +7, +8, +9, +9.5, +10, +10.5, +11, +11.5, +12, +13, +14,
+	            );
+
+	            foreach ($timezones as $tz)
+	            {
+	            	// Fake timezone id
+	            	$timezone_id = 'GMT'.sprintf('%+05.1f', $tz);
+	            	$sign = ($tz >= 0 ? '+' : '');
+	                $label = sprintf("GMT %s%02d:%02d", $sign, $tz, abs($tz - (int)$tz) * 60);
+	                $this->_details[$timezone_id]['continent'] = gTxt('timezone_gmt');
+	                $this->_details[$timezone_id]['city'] = $label;
+	                $this->_details[$timezone_id]['offset'] = $tz * 3600;
+	                $this->_offsets[$tz * 3600] = $timezone_id;
+	            }
+            }
+            else
+            {
+				$continents = array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia',
+					'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific');
+
+				$server_tz = date_default_timezone_get();
+				$tzlist = timezone_abbreviations_list();
+				foreach ($tzlist as $abbr => $timezones)
+				{
+					foreach ($timezones as $tz)
+					{
+						$timezone_id = $tz['timezone_id'];
+						// $timezone_ids are not unique among abbreviations
+						if ($timezone_id && !isset($this->_details[$timezone_id]))
+						{
+							$parts = explode('/', $timezone_id);
+							if (in_array($parts[0], $continents))
+							{
+								if (!empty($server_tz))
+								{
+									if (date_default_timezone_set($timezone_id))
+									{
+										$is_dst = date('I', time());
+									}
+								}
+
+								$this->_details[$timezone_id]['continent'] = $parts[0];
+								$this->_details[$timezone_id]['city'] = (isset($parts[1])) ? $parts[1] : '';
+								$this->_details[$timezone_id]['subcity'] = (isset($parts[2])) ? $parts[2] : '';
+								$this->_details[$timezone_id]['offset'] = date_offset_get(date_create()) - ($is_dst ? 3600 : 0);
+								$this->_details[$timezone_id]['dst'] = $tz['dst'];
+								$this->_details[$timezone_id]['abbr'] = strtoupper($abbr);
+
+								// Guesstimate a timezone key for a given GMT offset
+								$this->_offsets[$tz['offset']] = $timezone_id;
+							}
+						}
+					}
+				}
+			}
+
+			if (!empty($server_tz))
+			{
+				date_default_timezone_set($server_tz);
+			}
+		}
+
+		/**
+		 * Render HTML SELECT element for choosing a timezone
+		 * @param	string	$name	Element name
+		 * @param	string	$value	Selected timezone
+		 * @param	boolean	$blank_first Add empty first option
+		 * @param	boolean|string	$onchange n/a
+		 * @param	string	$select_id	HTML id attribute
+		 * @return	string	HTML markup
+		 */
+		function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
+		{
+			if (!empty($this->_details))
+			{
+				$thiscontinent = '';
+				$selected = false;
+
+				ksort($this->_details);
+				foreach ($this->_details as $timezone_id => $tz)
+				{
+					extract($tz);
+					if ($value == $timezone_id) $selected = true;
+					if ($continent !== $thiscontinent)
+					{
+						if ($thiscontinent !== '') $out[] = n.t.'</optgroup>';
+						$out[] = n.t.'<optgroup label="'.gTxt($continent).'">';
+						$thiscontinent = $continent;
+					}
+
+					$where = gTxt(str_replace('_', ' ', $city))
+								.(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
+								/*."($abbr)"*/;
+					$out[] = n.t.t.'<option value="'.htmlspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.'</option>';
+				}
+				$out[] = n.t.'</optgroup>';
+				return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'" class="list"'.
+					($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
+					'>'.
+					($blank_first ? n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
+					join('', $out).
+					n.'</select>';
+			}
+			return '';
+		}
+
+		/**
+		 * Build a matrix of timezone details
+		 * @return	array	Array of timezone details indexed by timezone key
+		 */
+		function details()
+		{
+			return $this->_details;
+		}
+
+		/**
+		 * Find a timezone key matching a given GMT offset.
+		 * NB: More than one key might fit any given GMT offset,
+		 * thus the returned value is ambiguous and merely useful for presentation purposes.
+		 * @param	integer $gmtoffset
+		 * @return	string	timezone key
+		 */
+		function key($gmtoffset)
+		{
+			return isset($this->_offsets[$gmtoffset]) ? $this->_offsets[$gmtoffset] : '';
+		}
+
+		 /**
+		 * Is DST in effect?
+		 * @param	integer $timestamp When?
+		 * @param	string 	$timezone_key Where?
+		 * @return	boolean	Yes, they are saving time, actually.
+		 */
+		function is_dst($timestamp, $timezone_key)
+		{
+			global $is_dst, $auto_dst;
+
+			$out = $is_dst;
+			if ($auto_dst && $timezone_key && timezone::is_supported())
+			{
+				$server_tz = date_default_timezone_get();
+				if ($server_tz)
+				{
+					// switch to client time zone
+					if (date_default_timezone_set($timezone_key))
+					{
+						$out = date('I', $timestamp);
+						// restore server time zone
+						date_default_timezone_set($server_tz);
+					}
+				}
+			}
+			return $out;
+		}
+
+		/**
+		 * Check for run-time timezone support
+		 * @return	boolean	All required timezone features are present in this PHP
+		 */
+		function is_supported()
+		{
+			return is_callable('date_default_timezone_set') && is_callable('timezone_abbreviations_list') && is_callable('date_create') &&
+				is_callable('array_intersect_key') &&
+				!defined('NO_TIMEZONE_SUPPORT');	// user-definable emergency brake
+		}
+	}
 ?>

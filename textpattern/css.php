@@ -3,8 +3,8 @@
 @deprecated
 @see ../css.php
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/css.php $
-$LastChangedRevision: 3189 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 if (!defined("txpath"))

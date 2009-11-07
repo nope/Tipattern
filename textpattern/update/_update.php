@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/update/_update.php $
-$LastChangedRevision: 3094 $
+$HeadURL$
+$LastChangedRevision$
 */
 	if (!defined('TXP_UPDATE'))
 		exit("Nothing here. You can't access this file directly.");
@@ -87,10 +87,10 @@ $LastChangedRevision: 3094 $
 			$dbversion = '4.0.8';
 	}
 
-	if (version_compare($dbversion, '4.0.9', '<'))
+	if (version_compare($dbversion, '4.2.0', '<'))
 	{
-		if ((include txpath.DS.'update'.DS.'_to_4.0.9.php') !== false)
-;#			$dbversion = '4.0.9';
+		if ((include txpath.DS.'update'.DS.'_to_4.2.0.php') !== false)
+			$dbversion = '4.2.0';
 	}
 
 	// keep track of updates for svn users

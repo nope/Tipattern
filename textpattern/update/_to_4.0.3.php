@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/update/_to_4.0.3.php $
-$LastChangedRevision: 3047 $
+$HeadURL$
+$LastChangedRevision$
 */
 	if (!defined('TXP_UPDATE'))
 		exit("Nothing here. You can't access this file directly.");

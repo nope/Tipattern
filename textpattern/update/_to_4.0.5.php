@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/update/_to_4.0.5.php $
-$LastChangedRevision: 2894 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 	if (!defined('TXP_UPDATE'))

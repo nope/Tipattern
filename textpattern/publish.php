@@ -13,8 +13,8 @@
 
 	Use of this software denotes acceptance of the Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/publish.php $
-$LastChangedRevision: 3187 $
+$HeadURL$
+$LastChangedRevision$
 
 */
 
@@ -45,7 +45,7 @@ $LastChangedRevision: 3187 $
 
 		// initialize parse trace globals
 	$txptrace        = array();
-	$txptracelevel   = '';
+	$txptracelevel   = 0;
 	$txp_current_tag = '';
 
 		// get all prefs as an array
@@ -110,6 +110,9 @@ $LastChangedRevision: 3187 $
 		//i18n: $textarray = load_lang('en-gb');
 	$textarray = load_lang(LANG);
 
+		// tidy up the site
+	janitor();
+
 		// here come the plugins
 	if ($use_plugins) load_plugins();
 
@@ -124,6 +127,10 @@ $LastChangedRevision: 3187 $
 
 	// Now that everything is initialized, we can crank down error reporting
 	set_error_level($production_status);
+
+	if( isset($feed) )
+		exit($feed());
+
 
 	if (gps('parentid') && gps('submit')) {
 		saveComment();
@@ -209,17 +216,18 @@ $LastChangedRevision: 3187 $
 
 		callback_event('pretext');
 
+			// set messy variables
+		$out =  makeOut('id','s','c','q','m','pg','p','month','author');
+
 		if(gps('rss')) {
 			include txpath.'/publish/rss.php';
-			exit(rss());
+			$out['feed'] = 'rss';
 		}
 
 		if(gps('atom')) {
 			include txpath.'/publish/atom.php';
-			exit(atom());
+			$out['feed'] = 'atom';
 		}
-			// set messy variables
-		$out =  makeOut('id','s','c','q','pg','p','month','author');
 
 			// some useful vars for taghandlers, plugins
 		$out['request_uri'] = preg_replace("|^https?://[^/]+|i","",serverSet('REQUEST_URI'));
@@ -257,16 +265,18 @@ $LastChangedRevision: 3187 $
 				switch($u1) {
 
 					case 'atom':
-						include txpath.'/publish/atom.php'; exit(atom());
+						include txpath.'/publish/atom.php';
+						$out['feed'] = 'atom'; break;
 
 					case 'rss':
-						include txpath.'/publish/rss.php'; exit(rss());
+						include txpath.'/publish/rss.php';
+						$out['feed'] = 'rss'; break;
 
 					// urldecode(strtolower(urlencode())) looks ugly but is the only way to
 					// make it multibyte-safe without breaking backwards-compatibility
 					case urldecode(strtolower(urlencode(gTxt('section')))):
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; $is_404 = empty($out['s']); break;
-					
+
 					case urldecode(strtolower(urlencode(gTxt('category')))):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; $is_404 = empty($out['c']); break;
 
@@ -361,13 +371,11 @@ $LastChangedRevision: 3187 $
 					$out['s'] = 'home'; //esperimental home call
 				} else {
 					$out['s'] = 'default'; 
-				}
-				
 			}
 		}
 		else {
 			// Messy mode, but prevent to get the id for file_downloads
-			if ($out['id'] && !$out['s']) { 
+			if ($out['id'] && !$out['s']) {
 				$rs = lookupByID($out['id']);
 				$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
 				$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
@@ -576,8 +584,8 @@ $LastChangedRevision: 3187 $
 			'excerpted' => '',
 			'author'    => '',
 			'sort'      => '',
-			'sortby'    => '',
-			'sortdir'   => '',
+			'sortby'    => '', // deprecated in 4.0.4
+			'sortdir'   => '', // deprecated in 4.0.4
 			'month'     => '',
 			'keywords'  => '',
 			'frontpage' => '',
@@ -627,7 +635,9 @@ $LastChangedRevision: 3187 $
 			include_once txpath.'/publish/search.php';
 
 			$s_filter = ($searchall ? filterSearch() : '');
-			$q = doSlash($q);
+			$q = trim($q);
+			$quoted = ($q[0] === '"') && ($q[strlen($q)-1] === '"');
+			$q = doSlash($quoted ? trim(trim($q, '"')) : $q);
 
             		// searchable article fields are limited to the columns of
             		// the textpattern table and a matching fulltext index must exist.
@@ -635,11 +645,49 @@ $LastChangedRevision: 3187 $
 			if (empty($cols) or $cols[0] == '') $cols = array('Title', 'Body');
 
 			$match = ', match (`'.join('`, `', $cols)."`) against ('$q') as score";
-			for ($i = 0; $i < count($cols); $i++)
+
+			if ($quoted || empty($m) || $m === 'exact')
 			{
-				$cols[$i] = "`$cols[$i]` rlike '$q'";
+				$search_terms = preg_replace('/\s+/', ' ', str_replace(array('%','_'), array('\\%','\\_'), $q));
+				for ($i = 0; $i < count($cols); $i++)
+				{
+					$cols[$i] = "`$cols[$i]` like '%$search_terms%'";
+				}
 			}
-			$cols = join(" or ", $cols);
+			elseif ($m === 'any')
+			{
+				$search_terms =
+					preg_replace
+					(
+						'/\s+/',
+						' | ',
+						str_replace
+						(
+							array('.','\\','+','*','?','[','^',']','$','(',')','{','}','=','!','<','>','|',':','-'),
+							array('\\\\.','\\\\\\','\\\\+','\\\\*','\\\\?','\\\\[','\\\\^','\\\\]','\\\\$','\\\\(','\\\\)','\\\\{','\\\\}','\\\\=','\\\\!','\\\\<','\\\\>','\\\\|','\\\\:','\\\\-'),
+							$q
+						)
+					);
+				for ($i = 0; $i < count($cols); $i++)
+				{
+					$cols[$i] = "`$cols[$i]` regexp '$search_terms'";
+				}
+			}
+			elseif ($m === 'all')
+			{
+				$search_terms = explode(' ', preg_replace('/\s+/', ' ', str_replace(array('%','_'), array('\\%','\\_'), $q)));
+				for ($i = 0; $i < count($cols); $i++)
+				{
+					$like = array();
+					foreach ($search_terms as $search_term)
+					{
+						$like[] = "`$cols[$i]` like '%$search_term%'";
+					}
+					$cols[$i] = '(' . join(' && ', $like) . ')';
+				}
+			}
+
+			$cols = join(' or ', $cols);
 			$search = " and ($cols) $s_filter";
 
 			// searchall=0 can be used to show search results for the current section only
@@ -655,16 +703,22 @@ $LastChangedRevision: 3187 $
 		// sortby and sortdir are deprecated
 		if ($sortby)
 		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
+
 			if (!$sortdir)
 			{
 				$sortdir = 'desc';
 			}
-
+			else
+			{
+				trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
+			}
 			$sort = "$sortby $sortdir";
 		}
 
 		elseif ($sortdir)
 		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
 			$sort = "Posted $sortdir";
 		}
 

@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/include/txp_tag.php $
-$LastChangedRevision: 3195 $
+$HeadURL$
+$LastChangedRevision$
 
 */
 

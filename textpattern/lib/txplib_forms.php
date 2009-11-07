@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/txplib_forms.php $
-$LastChangedRevision: 3188 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 //-------------------------------------------------------------
@@ -158,9 +158,10 @@ $LastChangedRevision: 3188 $
 	}
 
 // -------------------------------------------------------------
-	// deprecated (use escape_title instead), remove in crockery
+	// deprecated in 4.2.0
 	function cleanfInput($text)
 	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'escape_title')), E_USER_NOTICE);
 		return escape_title($text);
 	}
 

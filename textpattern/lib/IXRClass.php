@@ -9,8 +9,8 @@
 
    Contains Textpatternish amendments.
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/IXRClass.php $
-$LastChangedRevision: 2932 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 class IXR_Value {

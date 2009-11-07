@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/txplib_db.php $
-$LastChangedRevision: 3094 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 if (!defined('PFX')) {
@@ -11,7 +11,10 @@ if (!defined('PFX')) {
 	} else define ("PFX",'');
 }
 
-set_magic_quotes_runtime(0);
+if (get_magic_quotes_runtime())
+{
+	set_magic_quotes_runtime(0);
+}
 
 class DB {
 	function DB()

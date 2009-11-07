@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/theme/remora/remora.php $
-$LastChangedRevision: 3191 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');

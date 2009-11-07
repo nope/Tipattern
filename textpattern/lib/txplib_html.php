@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/txplib_html.php $
-$LastChangedRevision: 3177 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 	define("t","\t");
@@ -17,7 +17,7 @@ $LastChangedRevision: 3177 $
 		global $txp_user, $event, $app_mode, $theme;
 
 		if ($app_mode != 'async' && $event != 'tag') {
-			echo $theme->footer();
+			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
 			echo n.'</body>'.n.'</html>';
 		}

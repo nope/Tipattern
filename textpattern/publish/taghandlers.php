@@ -6,8 +6,8 @@
 
 	Use of this software denotes acceptance of the Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/publish/taghandlers.php $
-$LastChangedRevision: 3174 $
+$HeadURL$
+$LastChangedRevision$
 
 */
 
@@ -79,15 +79,18 @@ $LastChangedRevision: 3174 $
 		static $cache = array();
 
 		extract(lAtts(array(
-			'align'		=> '', // remove in crockery
+			'align'		=> '', // deprecated in 4.2.0
 			'class'		=> '',
 			'escape'	=> 'html',
 			'html_id' => '',
 			'id'			=> '',
 			'name'		=> '',
-			'style'		=> '', // remove in crockery?
+			'style'		=> '',
 			'wraptag' => '',
 		), $atts));
+
+		if ($align)
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
 
 		if ($name)
 		{
@@ -160,7 +163,7 @@ $LastChangedRevision: 3174 $
 		global $img_dir;
 
 		extract(lAtts(array(
-			'align'     => '', // remove in crockery
+			'align'     => '', // deprecated in 4.2.0
 			'class'     => '',
 			'escape'    => 'html',
 			'html_id'   => '',
@@ -169,11 +172,14 @@ $LastChangedRevision: 3174 $
 			'link'      => 0,
 			'link_rel'  => '',
 			'name'      => '',
-			'poplink'   => 0, // remove in crockery
-			'style'     => '', // remove in crockery
+			'poplink'   => 0, // is this used?
+			'style'     => '',
 			'wraptag'   => '',
 			'width'   	=> ''
 		), $atts));
+
+		if ($align)
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
 
 		if ($name)
 		{
@@ -241,17 +247,37 @@ $LastChangedRevision: 3174 $
 	}
 
 // -------------------------------------------------------------
-	function output_form($atts)
+
+	function output_form($atts, $thing = NULL)
 	{
+		global $yield;
+
 		extract(lAtts(array(
 			'form' => '',
 		), $atts));
 
 		if (!$form)
+		{
 			trigger_error(gTxt('form_not_specified'));
+		}
 		else
-			return parse_form($form);
+		{
+			$yield[] = $thing !== NULL ? parse($thing) : NULL;
+			$out = parse_form($form);
+			array_pop($yield);
+			return $out;
+		}
+	}
 
+// -------------------------------------------------------------
+
+	function yield()
+	{
+		global $yield;
+
+		$inner = end($yield);
+		
+		return isset($inner) ? $inner : '';
 	}
 
 // -------------------------------------------------------------
@@ -529,6 +555,15 @@ $LastChangedRevision: 3174 $
 	}
 
 // -------------------------------------------------------------
+
+	function link_id()
+	{
+		global $thislink;
+		assert_link();
+		return $thislink['id'];
+	}
+
+// -------------------------------------------------------------
 	function eE($txt) // convert email address into unicode entities
 	{
 		for ($i=0;$i<strlen($txt);$i++) {
@@ -596,8 +631,8 @@ $LastChangedRevision: 3174 $
 			'limit'    => 10,
 			'section'  => '',
 			'sort'     => 'Posted desc',
-			'sortby'   => '',
-			'sortdir'  => '',
+			'sortby'   => '', // deprecated
+			'sortdir'  => '', // deprecated
 			'wraptag'  => '',
 			'no_widow' => @$prefs['title_no_widow'],
 		), $atts));
@@ -606,9 +641,15 @@ $LastChangedRevision: 3174 $
 		// sortby and sortdir are deprecated
 		if ($sortby)
 		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
+
 			if (!$sortdir)
 			{
 				$sortdir = 'desc';
+			}
+			else
+			{
+				trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
 			}
 
 			$sort = "$sortby $sortdir";
@@ -616,6 +657,7 @@ $LastChangedRevision: 3174 $
 
 		elseif ($sortdir)
 		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
 			$sort = "Posted $sortdir";
 		}
 
@@ -1118,6 +1160,7 @@ $LastChangedRevision: 3174 $
 			'label'   => gTxt('search'),
 			'button'  => '',
 			'section' => '',
+			'match' => 'exact',
 		),$atts));
 
 		if ($form) {
@@ -1131,8 +1174,9 @@ $LastChangedRevision: 3174 $
 		$id =  (!empty($html_id)) ? ' id="'.$html_id.'"' : '';
 		$out = fInput('text','q',$q,'','','',$size);
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
+		$out = ($match === 'exact') ? $out : fInput('hidden','m',$match) . $out;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
-		
+
 		if (!$section) {
 			return '<form method="get" action="'.hu.'"'.$id.'>'.
 				n.$out.
@@ -1947,15 +1991,6 @@ $LastChangedRevision: 3174 $
 	}
 
 // -------------------------------------------------------------
-// DEPRECATED: the old comment message body tag
-	function message($atts)
-	{
-		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-		return comment_message($atts);
-	}
-
-// -------------------------------------------------------------
 
 	function author($atts)
 	{
@@ -2338,14 +2373,17 @@ $LastChangedRevision: 3174 $
 		assert_article();
 
 		extract(lAtts(array(
-			'align'     => '', // remove in crockery
+			'align'     => '', // deprecated in 4.2.0
 			'class'     => '',
 			'escape'    => 'html',
 			'html_id'   => '',
-			'style'     => '', // remove in crockery?
+			'style'     => '',
 			'thumbnail' => 0,
 			'wraptag'   => '',
 		), $atts));
+
+		if ($align)
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
 
 		if ($thisarticle['article_image'])
 		{
@@ -2449,20 +2487,38 @@ $LastChangedRevision: 3174 $
 			'limit'   => 5,
 		), $atts));
 
+		$m = $pretext['m'];
 		$q = $pretext['q'];
 
-		$result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
-		preg_match_all('/(\G|\s).{0,50}'.preg_quote($q).'.{0,50}(\s|$)/iu', $result, $concat);
+		$quoted = ($q[0] === '"') && ($q[strlen($q)-1] === '"');
+		$q = $quoted ? trim(trim($q, '"')) : $q;
 
-		for ($i = 0, $r = array(); $i < min($limit, count($concat[0])); $i++)
+		$result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
+
+		if ($quoted || empty($m) || $m === 'exact')
 		{
-			$r[] = trim($concat[0][$i]);
+			$regex_search = '/(?:\G|\s).{0,50}'.preg_quote($q).'.{0,50}(?:\s|$)/iu';
+			$regex_hilite = '/('.preg_quote($q).')/i';
+		}
+		else
+		{
+			$regex_search = '/(?:\G|\s).{0,50}('.preg_replace('/\s+/', '|', preg_quote($q)).').{0,50}(?:\s|$)/iu';
+			$regex_hilite = '/('.preg_replace('/\s+/', '|', preg_quote($q)).')/i';
+		}
+
+		preg_match_all($regex_search, $result, $concat);
+		$concat = $concat[0];
+
+		for ($i = 0, $r = array(); $i < min($limit, count($concat)); $i++)
+		{
+			$r[] = trim($concat[$i]);
 		}
 
 		$concat = join($break.n, $r);
 		$concat = preg_replace('/^[^>]+>/U', '', $concat);
 #TODO
-		$concat = preg_replace('/('.preg_quote($q).')/i', "<$hilight>$1</$hilight>", $concat);
+
+		$concat = preg_replace($regex_hilite, "<$hilight>$1</$hilight>", $concat);
 
 		return ($concat) ? trim($break.$concat.$break) : '';
 	}

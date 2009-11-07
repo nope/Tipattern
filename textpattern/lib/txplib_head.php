@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/lib/txplib_head.php $
-$LastChangedRevision: 3182 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 // -------------------------------------------------------------
@@ -157,7 +157,7 @@ $LastChangedRevision: 3182 $
 		if (isset($edit_assign_assets))
 		{
 			echo "case 'delete':".n.
-					t."pjs.innerHTML = '<label for=\"assign_assets\">".gTxt('assign_assets_to')."</label><span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($edit_assign_assets)))."<\/span>';".n.
+					t."pjs.innerHTML = '<label for=\"assign_assets\">".addslashes(gTxt('assign_assets_to'))."</label><span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($edit_assign_assets)))."<\/span>';".n.
 					t.'break;'.n.n;
 		}
 ?>
@@ -173,7 +173,6 @@ $LastChangedRevision: 3182 $
 		addEvent(window, 'load', cleanSelects);
 	-->
 	</script>
-	
 	<?php
 	echo $theme->html_head();
 	callback_event('admin_side', 'head_end');
@@ -182,7 +181,7 @@ $LastChangedRevision: 3182 $
 	<body id="<?php echo $body_id; ?>">
 	<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
-		echo $theme->header();
+		echo pluggable_ui('admin_side', 'header', $theme->header());
 		callback_event('admin_side', 'pagetop_end');
 	}
 

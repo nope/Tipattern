@@ -6,8 +6,8 @@
 
 	Use of this software denotes acceptance of the Textpattern license agreement
 
-$HeadURL: http://textpattern.googlecode.com/svn/development/4.0/textpattern/publish/comment.php $
-$LastChangedRevision: 3147 $
+$HeadURL$
+$LastChangedRevision$
 
 */
 
@@ -308,7 +308,7 @@ $LastChangedRevision: 3147 $
 		extract($in);
 
 		if (!checkCommentsAllowed($parentid))
-			txp_die ( gTxt('comments_closed'), '403');
+			txp_die(gTxt('comments_closed'), '403');
 
 		$ip = serverset('REMOTE_ADDR');
 
@@ -574,6 +574,7 @@ $LastChangedRevision: 3147 $
 	# deprecated, use fInput instead
 	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='')
 	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'fInput')), E_USER_NOTICE);
 		$o = array(
 			'<input type="'.$type.'" name="'.$name.'" id="'.$name.'" value="'.$val.'"',
 			($size)	? ' size="'.$size.'"'	  : '',
