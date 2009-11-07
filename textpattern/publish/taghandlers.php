@@ -966,7 +966,7 @@ $LastChangedRevision: 3174 $
 			else
 			{
 				$rs = safe_rows_start('name, title', 'txp_category',
-					"type = '".doSlash($type)."' and name not in('default','home',root') $exclude $shallow order by ".($sort ? $sort : 'name ASC'));
+					"type = '".doSlash($type)."' and name not in('default','home','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC'));
 			}
 		}
 
