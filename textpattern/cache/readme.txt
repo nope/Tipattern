@@ -1,0 +1,1 @@
+The software need cache directory writible.
