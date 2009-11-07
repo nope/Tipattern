@@ -39,7 +39,7 @@ if (!defined('txpinterface')) die('txpinterface is undefined.');
 		);
 		echo tag("Cache Statistics","h3");
 		global $path_to_site;$count = array('size'=>0, 'num'=>0);
-		$txp_cache_dir = txpath."/cache";
+		$txp_cache_dir = $path_to_site .'/textpattern/cache';
 		if (!empty($txp_cache_dir) and $fp = opendir($txp_cache_dir)) {
 			while (false !== ($file = readdir($fp))) {
 				if ($file{0} != ".") {

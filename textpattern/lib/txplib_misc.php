@@ -2346,7 +2346,7 @@ eod;
 	function flushcachedir($force_clean = false) {
 		global $lastmod;
 
-		$txp_cache_dir = txpath.'\cache';
+		$txp_cache_dir = $path_to_site .'/textpattern/cache';
 
 		if (!empty($txp_cache_dir) and $fp = opendir($txp_cache_dir)) {
 			$last = strtotime($lastmod);
