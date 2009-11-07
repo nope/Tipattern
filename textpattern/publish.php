@@ -375,6 +375,7 @@ $LastChangedRevision$
 					$out['s'] = 'default'; 
 				}
 			}
+		}
 		else {
 			// Messy mode, but prevent to get the id for file_downloads
 			if ($out['id'] && !$out['s']) {
