@@ -1,1 +1,1 @@
-The software need cache directory writible.
+The Tipattern software need cache directory writible.
