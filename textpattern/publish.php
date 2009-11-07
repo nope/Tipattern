@@ -351,13 +351,13 @@ $LastChangedRevision$
 							break;
 
 							case 'id_title':
-								if (is_numeric($u1) && ckExID($u1))
-								{
+								if (is_numeric($u1) && ckExID($u1))	{
 									$rs = lookupByID($u1);
 									$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
 									$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
 									$is_404 = (empty($out['s']) or empty($out['id']));
-								}else{
+								} 
+								else {
 									# We don't want to miss the /section/ pages
 									$out['s']= ckEx('section',$u1)? $u1 : '';
 									$is_404 = empty($out['s']);
@@ -366,13 +366,15 @@ $LastChangedRevision$
 
 						}
 				}
-			} else {
+			} 
+			else {
 				if(!$out['s'] && !$out['c'] && !$out['q'] && !$out['s'] && !$out['author']) {
 					$out['s'] = 'home'; //esperimental home call
-				} else {
+				} 
+				else {
 					$out['s'] = 'default'; 
+				}
 			}
-		}
 		else {
 			// Messy mode, but prevent to get the id for file_downloads
 			if ($out['id'] && !$out['s']) {
