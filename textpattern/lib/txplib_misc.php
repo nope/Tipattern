@@ -2344,7 +2344,7 @@ eod;
 	}
 	
 	function flushcachedir($force_clean = false) {
-		global $lastmod;
+		global $lastmod, $path_to_site;
 
 		$txp_cache_dir = $path_to_site .'/textpattern/cache';
 
