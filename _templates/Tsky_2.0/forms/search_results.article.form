@@ -1,0 +1,16 @@
+<div class="entry hentry">
+	
+	<div class="meta">
+		
+			<h1 class="title entry-title"><txp:permlink><txp:title /></txp:permlink></h1>
+		
+		<p class="metadata">
+			<span class="date updated"><txp:posted format="%A %d %b %Y" /></span> 
+		</p>
+	</div>
+	
+	<div class="content">
+		<txp:search_result_excerpt />
+	</div>
+		
+</div> <!-- /entry -->

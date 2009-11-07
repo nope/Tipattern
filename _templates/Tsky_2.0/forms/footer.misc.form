@@ -1,0 +1,39 @@
+</div> <!-- /main content -->
+
+<div id="footer" class="clearfix">
+	
+	<div class="secondary">
+		
+		<div id="search" class="widget widget_search">
+			<div class="searchbox">
+			<form method="get" id="searchform" action="<txp:site_url />">
+			<fieldset>
+				<label for="s" id="searchlabel">Cerca nel sito</label>
+				<input type="text" value="" name="q" id="s" />
+				<input type="submit" id="searchsubmit" value="Cerca" />
+			</fieldset>
+			</form>
+		</div>
+	</div>		
+	</div> <!-- /secondary -->
+	
+	<div class="primary">
+			<div class="widget">
+				<txp:category_list label="Categorie" labeltag="h3" type="article" break=" | " />
+			</div>
+	</div> <!-- /primary -->
+	
+	<div id="theme-info" class="clearfix">
+		
+		<div class="secondary">
+			<p class="feed"><txp:feed_link label="Feed" /></p>
+		</div>
+		
+		<div class="primary content">
+			<p>Powered by <a href="http://textpattern.com/">Textpattern</a> and <a href="http://sabatia.it/progetti/texttheme/tsky/">Tsky</a> (by <a href="http://sabatia.it">Luca Sabato</a>) port of the original theme <a href="http://tarskitheme.com/">Tarski</a></p>
+		</div>		
+	</div> <!-- /theme-info -->
+	
+</div> <!-- /footer -->
+
+</div></body></html>

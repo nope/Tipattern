@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="it" lang="it">
+
+<head profile="http://gmpg.org/xfn/11">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<link rel="home" href="<txp:site_url />" />
+
+		<txp:feed_link flavor="atom" format="link" label="Atom" />
+		<txp:feed_link flavor="rss" format="link" label="RSS" />
+
+		<txp:css format="link" media="all" n="default" rel="stylesheet" />
+		<txp:css format="link" media="screen,projection" n="screen" rel="stylesheet" />
+		<txp:css format="link" media="print" n="print" rel="stylesheet" />
+
+		<txp:rsd />
+		
+		<txp:meta_keywords />
+		<txp:meta_author />
+		
+		<title><txp:page_title /></title>
+
+</head>
+
+<body id="<txp:if_section name="">front<txp:else /><txp:section /></txp:if_section>" class="centre">
+<div id="wrapper">
+
+<div id="header">
+
+	<div id="header-image"><txp:link_to_home><img alt="<txp:site_name />" src="<txp:site_url />images/greytree.jpg" /></txp:link_to_home></div>
+	
+	<div id="navigation" class="clearfix">
+	<txp:section_list exclude="about" active_class="nav-current" break="li" class="primary xoxo" default_title="Home" include_default="1" sort="title asc" wraptag="ul" />
+
+	<div class="secondary">
+		<p class="feed"><txp:feed_link label="Feed" /></p>
+	</div>
+	</div>
+	
+	<txp:if_individual_article>
+	<p class="primary-span articlenav">
+		<span class="previous-entry">&lsaquo; <txp:link_to_prev><txp:prev_title /></txp:link_to_prev></span> 
+		<span class="separator">&nbsp;&bull;&nbsp;</span> 
+		<span class="next-entry"><txp:link_to_next><txp:next_title /></txp:link_to_next> &rsaquo;</span>
+	</p>
+	</txp:if_individual_article>
+	
+</div>
+
+<div id="content" class="clearfix">

@@ -1,0 +1,55 @@
+<txp:output_form form="header" />
+
+<div class="primary entry">
+
+	<div class="meta">
+		<h1 class="title"><txp:error_status /></h1>
+	</div>
+
+	<div class="content">
+		<txp:error_message />
+	</div>
+
+</div> <!-- /primary -->
+
+<div class="secondary">
+	
+	<div id="search" class="widget widget_search">
+		<div class="searchbox">
+		<form method="get" id="searchform" action="<txp:site_url />">
+		<fieldset>
+			<label for="s" id="searchlabel">Cerca nel sito</label>
+			<input type="text" value="" name="q" id="s" />
+			<input type="submit" id="searchsubmit" value="Cerca" />
+		</fieldset>
+		</form>
+		</div>
+	</div>		
+</div> <!-- /secondary -->
+
+</div> <!-- /main content -->
+
+<div id="footer" class="clearfix">
+	
+	<div class="secondary">
+		&nbsp;
+	</div> <!-- /secondary -->
+	
+	<div class="primary">
+		&nbsp;
+	</div> <!-- /primary -->
+	
+	<div id="theme-info" class="clearfix">
+		
+		<div class="secondary">
+			<p class="feed"><txp:feed_link label="Feed" /></p>
+		</div>
+		
+		<div class="primary content">
+			<p>Powered by <a href="http://textpattern.com/">Textpattern</a> and <a href="http://sabatia.it/progetti/texttheme/tsky/">Tsky</a> port on original theme <a href="http://tarskitheme.com/">Tarski</a></p>
+		</div>		
+	</div> <!-- /theme-info -->
+	
+</div> <!-- /footer -->
+
+</div></body></html>

@@ -1,0 +1,23 @@
+<div id="sidebar" class="secondary">
+	
+	<div class="widget">
+		<txp:recent_articles break="li" label="Articoli recenti" labeltag="h3" limit="5" wraptag="ul" />
+	</div>
+	
+	<div class="widget">
+		<txp:recent_comments break="li" label="Commenti recenti" labeltag="h3" limit="5" sort="posted desc" wraptag="ul" />
+	</div>
+	
+	<div class="widget">
+		<txp:linklist break="li" category="textpattern" label="blogroll" labeltag="h3" limit="5" sort="linksort asc" wraptag="ul" />
+	</div>
+	
+	<div class="widget">
+		<h3>Meta</h3>
+		<ul>
+			<li><a href="<txp:site_url />textpattern">Admin</a></li>
+			<li><txp:feed_link label="Feed" /></li>
+		</ul>
+	</div>
+
+</div>

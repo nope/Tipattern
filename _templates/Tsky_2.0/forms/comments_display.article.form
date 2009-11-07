@@ -1,0 +1,24 @@
+<txp:if_individual_article>
+<txp:if_comments_allowed>
+<div class="widget">	
+<txp:if_comments>
+<h3>Commenti</h3>
+<txp:comments />
+</txp:if_comments>
+
+<txp:if_comments_preview>
+<div id="cpreview">
+<txp:comments_preview />
+</div>
+</txp:if_comments_preview>
+
+<h3 id="<txp:text item="comment" />"><txp:comments_invite textonly="1" showalways="1" showcount="0" /></h3>
+<txp:comments_form isize="25" msgcols="45" msgrows="15" />
+</div>
+<txp:else />
+<txp:if_comments>
+<h3 id="<txp:text item="comment" />">Commenti</h3>
+<txp:comments />
+</txp:if_comments>
+</txp:if_comments_allowed>
+</txp:if_individual_article>

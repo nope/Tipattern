@@ -1,0 +1,14 @@
+<div class="entry hentry">
+	
+	<div class="meta">
+		
+			<h1 class="title entry-title"><txp:permlink><txp:title /></txp:permlink></h1>
+		
+			<p class="metadata">
+				<span class="date updated"><txp:posted format="%A %d %b %Y" /></span> 
+					<txp:if_article_category> in <span class="categories"><txp:category1 title="1" link="1" /><txp:if_article_category number="2">, <txp:category2 title="1" link="1" /></txp:if_article_category></span></txp:if_article_category>
+				 <txp:if_comments> | <a href="<txp:permlink />#<txp:text item="comment" />" class="comments-label" title="<txp:comments_invite textonly="1" showcount="0" />">Commenti [<txp:comments_count />]</a><txp:else /><txp:if_comments_allowed> | <txp:comments_invite textonly="0" showcount="1" showalways="1" /></txp:if_comments_allowed></txp:if_comments>	
+			</p>
+	</div>
+		
+</div> <!-- /entry -->
